@@ -4,7 +4,7 @@ import { initials, avatarColor } from '../data'
 
 const POSITIONS = ['All','GK','CB','RB','LB','CDM','CM','CAM','LW','RW','CF','ST']
 
-export default function Players({ players }) {
+export default function Players({ players, onViewPlayer }) {
   const [query,    setQuery]    = useState('')
   const [position, setPosition] = useState('All')
   const [sortBy,   setSortBy]   = useState('rating')
@@ -66,7 +66,7 @@ export default function Players({ players }) {
 
       <div className="players-grid">
         {filtered.map(p => (
-          <div key={p.id} className="player-card">
+          <div key={p.id} className="player-card player-clickable" onClick={() => onViewPlayer?.(p)}>
             <div className="pc-top">
               <div className="pc-av" style={{ background: avatarColor(p.id) }}>
                 {initials(p.name)}

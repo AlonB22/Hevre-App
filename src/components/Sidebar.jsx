@@ -14,7 +14,7 @@ const NAV = [
   { id: 'payments',  label: 'Payments',     icon: CircleDollarSign  },
 ]
 
-export default function Sidebar({ user, view, setView, open, onClose, onLogout }) {
+export default function Sidebar({ user, view, setView, open, onClose, onLogout, onOpenProfile, userPic }) {
   const goTo = (id) => { setView(id); onClose() }
 
   return (
@@ -27,12 +27,20 @@ export default function Sidebar({ user, view, setView, open, onClose, onLogout }
         </div>
       </div>
 
-      <div className="sb-user">
+      <div
+        className="sb-user"
+        onClick={onOpenProfile}
+        style={{ cursor: 'pointer' }}
+        title="View your profile"
+      >
         <div
           className="sb-avatar"
-          style={{ background: avatarColor(user.id) }}
+          style={{ background: avatarColor(user.id), overflow: 'hidden', padding: 0 }}
         >
-          {initials(user.name)}
+          {userPic
+            ? <img src={userPic} alt="You" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            : initials(user.name)
+          }
         </div>
         <div className="sb-user-info">
           <strong>{user.name}</strong>

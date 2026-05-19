@@ -1,7 +1,7 @@
 import { CalendarDays, ChevronRight, Clock, MapPin, Users } from 'lucide-react'
 import { LOCATIONS, formatDate, initials, avatarColor, spotsLeft } from '../data'
 
-export default function Dashboard({ user, games, players, onRsvp, setView }) {
+export default function Dashboard({ user, games, players, onRsvp, setView, onViewPlayer }) {
   const upcoming = games
     .filter(g => g.status === 'upcoming')
     .sort((a, b) => a.date.localeCompare(b.date))
@@ -92,7 +92,7 @@ export default function Dashboard({ user, games, players, onRsvp, setView }) {
           </div>
           <div className="scorer-list">
             {topScorers.map((p, i) => (
-              <div key={p.id} className="scorer-row">
+              <div key={p.id} className="scorer-row player-clickable" onClick={() => onViewPlayer?.(p)}>
                 <div className="scorer-rank">{i + 1}</div>
                 <div className="scorer-av" style={{ background: avatarColor(p.id) }}>
                   {initials(p.name)}
@@ -156,7 +156,7 @@ export default function Dashboard({ user, games, players, onRsvp, setView }) {
           </div>
           <div className="mini-grid">
             {players.slice(0, 11).map(p => (
-              <div key={p.id} className="mini-player" title={`${p.name} · ${p.position}`}>
+              <div key={p.id} className="mini-player player-clickable" title={`${p.name} · ${p.position}`} onClick={() => onViewPlayer?.(p)}>
                 <div className="mini-av" style={{ background: avatarColor(p.id) }}>
                   {initials(p.name)}
                 </div>

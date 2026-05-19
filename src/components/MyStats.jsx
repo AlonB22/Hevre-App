@@ -1,6 +1,6 @@
 import { LOCATIONS, formatDate, initials, avatarColor } from '../data'
 
-export default function MyStats({ user, games, players, ratings, onOpenModal }) {
+export default function MyStats({ user, games, players, ratings, onOpenModal, onViewPlayer }) {
   const myPast = games
     .filter(g => g.status === 'past' && g.playerIds.includes(user.id))
     .sort((a, b) => b.date.localeCompare(a.date))
@@ -142,11 +142,15 @@ export default function MyStats({ user, games, players, ratings, onOpenModal }) 
                     <div className="mystats-raters">
                       <span className="mystats-raters-label">Rated by</span>
                       {raters.map(({ player, score }) => (
-                        <div key={player.id} className="rater-chip">
+                        <div
+                          key={player.id}
+                          className="rater-chip player-clickable"
+                          onClick={e => { e.stopPropagation(); onViewPlayer?.(player) }}
+                          title={`${player.name} — click to view profile`}
+                        >
                           <div
                             className="rater-av"
                             style={{ background: avatarColor(player.id) }}
-                            title={player.name}
                           >
                             {initials(player.name)}
                           </div>

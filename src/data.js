@@ -1,36 +1,36 @@
 export const PASSWORD = 'footy123'
 
 export const PLAYERS = [
-  { id: 1,  name: 'Alon Berla',      username: 'alon_b',   email: 'alon@hevre.app',   position: 'CAM', rating: 8.6, goals: 24, assists: 18, cleanSheets: 0,  gamesPlayed: 28, neighborhood: 'Ramat Gan',      paid: true  },
-  { id: 2,  name: 'Ilia Simhovich',  username: 'ilia_s',   email: 'ilia@hevre.app',   position: 'GK',  rating: 8.1, goals: 0,  assists: 2,  cleanSheets: 14, gamesPlayed: 26, neighborhood: 'Tel Aviv',         paid: true  },
-  { id: 3,  name: 'Yoel Kraitman',   username: 'yoel_k',   email: 'yoel@hevre.app',   position: 'ST',  rating: 8.4, goals: 31, assists: 8,  cleanSheets: 0,  gamesPlayed: 30, neighborhood: 'Givatayim',        paid: false },
-  { id: 4,  name: 'Noam Cohen',      username: 'noam_c',   email: 'noam@hevre.app',   position: 'CB',  rating: 7.8, goals: 2,  assists: 3,  cleanSheets: 0,  gamesPlayed: 25, neighborhood: 'Tel Aviv',         paid: true  },
+  { id: 1,  name: 'Alon Berla',      username: 'alon_b',   email: 'alon@hevre.app',   position: 'CAM', rating: 8.6, goals: 24, assists: 18, cleanSheets: 0,  gamesPlayed: 28, neighborhood: 'Ramat Gan',      paid: true,  bio: "Grew up playing in Ramat Gan streets. Addicted to the through-ball. If you make the run, I'll find you." },
+  { id: 2,  name: 'Ilia Simhovich',  username: 'ilia_s',   email: 'ilia@hevre.app',   position: 'GK',  rating: 8.1, goals: 0,  assists: 2,  cleanSheets: 14, gamesPlayed: 26, neighborhood: 'Tel Aviv',         paid: true,  bio: "Last line of defense. Played in the youth academy, now keeping it clean in the neighborhood. Shout at me if the wall's wrong." },
+  { id: 3,  name: 'Yoel Kraitman',   username: 'yoel_k',   email: 'yoel@hevre.app',   position: 'ST',  rating: 8.4, goals: 31, assists: 8,  cleanSheets: 0,  gamesPlayed: 30, neighborhood: 'Givatayim',        paid: false, bio: "I score. That's it. Ask the defenders." },
+  { id: 4,  name: 'Noam Cohen',      username: 'noam_c',   email: 'noam@hevre.app',   position: 'CB',  rating: 7.8, goals: 2,  assists: 3,  cleanSheets: 0,  gamesPlayed: 25, neighborhood: 'Tel Aviv',         paid: true,  bio: "Defending is an art. I read the game before the attacker knows where he's going. Clean sheets are my trophies." },
   { id: 5,  name: 'Daniel Levy',     username: 'daniel_l', email: 'daniel@hevre.app', position: 'RW',  rating: 7.9, goals: 11, assists: 9,  cleanSheets: 0,  gamesPlayed: 24, neighborhood: 'Ramat Gan',        paid: false },
   { id: 6,  name: 'Omer Katz',       username: 'omer_k',   email: 'omer@hevre.app',   position: 'CM',  rating: 7.6, goals: 5,  assists: 11, cleanSheets: 0,  gamesPlayed: 22, neighborhood: 'Petah Tikva',      paid: true  },
   { id: 7,  name: 'Amit Shapiro',    username: 'amit_s',   email: 'amit@hevre.app',   position: 'LB',  rating: 7.4, goals: 1,  assists: 4,  cleanSheets: 0,  gamesPlayed: 20, neighborhood: 'Tel Aviv',         paid: true  },
-  { id: 8,  name: 'Roi Ben-David',   username: 'roi_bd',   email: 'roi@hevre.app',    position: 'ST',  rating: 7.7, goals: 15, assists: 5,  cleanSheets: 0,  gamesPlayed: 22, neighborhood: 'Givatayim',        paid: false },
+  { id: 8,  name: 'Roi Ben-David',   username: 'roi_bd',   email: 'roi@hevre.app',    position: 'ST',  rating: 7.7, goals: 15, assists: 5,  cleanSheets: 0,  gamesPlayed: 22, neighborhood: 'Givatayim',        paid: false, bio: "Give me the ball in the box, I'll do the rest. From Givatayim, born and raised on the pitch." },
   { id: 9,  name: 'Lior Mizrahi',    username: 'lior_m',   email: 'lior@hevre.app',   position: 'CDM', rating: 7.5, goals: 3,  assists: 7,  cleanSheets: 0,  gamesPlayed: 21, neighborhood: 'Bnei Brak',        paid: true  },
   { id: 10, name: 'Tal Peretz',      username: 'tal_p',    email: 'tal@hevre.app',    position: 'RB',  rating: 7.3, goals: 2,  assists: 5,  cleanSheets: 0,  gamesPlayed: 19, neighborhood: 'Ramat Gan',        paid: true  },
-  { id: 11, name: 'Eran Goldberg',   username: 'eran_g',   email: 'eran@hevre.app',   position: 'LW',  rating: 8.0, goals: 13, assists: 12, cleanSheets: 0,  gamesPlayed: 26, neighborhood: 'Tel Aviv',         paid: true  },
+  { id: 11, name: 'Eran Goldberg',   username: 'eran_g',   email: 'eran@hevre.app',   position: 'LW',  rating: 8.0, goals: 13, assists: 12, cleanSheets: 0,  gamesPlayed: 26, neighborhood: 'Tel Aviv',         paid: true,  bio: "Left foot is the right foot. Wide open spaces are my church. If there's a cross to whip in, I'm already there." },
   { id: 12, name: 'Niv Israeli',     username: 'niv_i',    email: 'niv@hevre.app',    position: 'CF',  rating: 7.8, goals: 16, assists: 7,  cleanSheets: 0,  gamesPlayed: 23, neighborhood: 'Holon',            paid: false },
   { id: 13, name: 'Guy Amar',        username: 'guy_a',    email: 'guy@hevre.app',    position: 'CB',  rating: 7.2, goals: 1,  assists: 2,  cleanSheets: 0,  gamesPlayed: 18, neighborhood: 'Bat Yam',          paid: true  },
   { id: 14, name: 'Shay Bar',        username: 'shay_b',   email: 'shay@hevre.app',   position: 'CM',  rating: 7.9, goals: 7,  assists: 13, cleanSheets: 0,  gamesPlayed: 25, neighborhood: 'Tel Aviv',         paid: true  },
   { id: 15, name: 'Itai Levi',       username: 'itai_l',   email: 'itai@hevre.app',   position: 'GK',  rating: 7.1, goals: 0,  assists: 1,  cleanSheets: 8,  gamesPlayed: 18, neighborhood: 'Petah Tikva',      paid: false },
-  { id: 16, name: 'Matan Cohen',     username: 'matan_c',  email: 'matan@hevre.app',  position: 'RW',  rating: 8.1, goals: 14, assists: 10, cleanSheets: 0,  gamesPlayed: 24, neighborhood: 'Ramat Gan',        paid: true  },
-  { id: 17, name: 'Avi Friedman',    username: 'avi_f',    email: 'avi@hevre.app',    position: 'ST',  rating: 7.6, goals: 18, assists: 6,  cleanSheets: 0,  gamesPlayed: 26, neighborhood: 'Tel Aviv',         paid: true  },
+  { id: 16, name: 'Matan Cohen',     username: 'matan_c',  email: 'matan@hevre.app',  position: 'RW',  rating: 8.1, goals: 14, assists: 10, cleanSheets: 0,  gamesPlayed: 24, neighborhood: 'Ramat Gan',        paid: true,  bio: "Fast, clinical, always on the right side. Ramat Gan's finest winger — ask anyone who's tried to track me." },
+  { id: 17, name: 'Avi Friedman',    username: 'avi_f',    email: 'avi@hevre.app',    position: 'ST',  rating: 7.6, goals: 18, assists: 6,  cleanSheets: 0,  gamesPlayed: 26, neighborhood: 'Tel Aviv',         paid: true,  bio: "Grew up watching Del Piero. Still trying to bend it like him. Every game is a new chance to score something beautiful." },
   { id: 18, name: 'Dror Stern',      username: 'dror_s',   email: 'dror@hevre.app',   position: 'CB',  rating: 7.3, goals: 1,  assists: 3,  cleanSheets: 0,  gamesPlayed: 20, neighborhood: 'Givatayim',        paid: true  },
   { id: 19, name: 'Ofir Klein',      username: 'ofir_k',   email: 'ofir@hevre.app',   position: 'LB',  rating: 7.5, goals: 3,  assists: 6,  cleanSheets: 0,  gamesPlayed: 22, neighborhood: 'Rishon LeZion',    paid: false },
   { id: 20, name: 'Yair Solomon',    username: 'yair_s',   email: 'yair@hevre.app',   position: 'CAM', rating: 8.2, goals: 20, assists: 16, cleanSheets: 0,  gamesPlayed: 27, neighborhood: 'Tel Aviv',         paid: true  },
   { id: 21, name: 'Boaz Adler',      username: 'boaz_a',   email: 'boaz@hevre.app',   position: 'CDM', rating: 7.4, goals: 2,  assists: 5,  cleanSheets: 0,  gamesPlayed: 19, neighborhood: 'Ramat Gan',        paid: true  },
   { id: 22, name: 'Ran Elias',       username: 'ran_e',    email: 'ran@hevre.app',    position: 'CM',  rating: 7.7, goals: 6,  assists: 12, cleanSheets: 0,  gamesPlayed: 23, neighborhood: 'Herzliya',         paid: true  },
-  { id: 23, name: 'Nir Gal',         username: 'nir_g',    email: 'nir@hevre.app',    position: 'ST',  rating: 8.0, goals: 22, assists: 7,  cleanSheets: 0,  gamesPlayed: 28, neighborhood: 'Tel Aviv',         paid: false },
+  { id: 23, name: 'Nir Gal',         username: 'nir_g',    email: 'nir@hevre.app',    position: 'ST',  rating: 8.0, goals: 22, assists: 7,  cleanSheets: 0,  gamesPlayed: 28, neighborhood: 'Tel Aviv',         paid: false, bio: "Top scorer three seasons running. Numbers don't lie — neither does my left foot." },
   { id: 24, name: 'Asaf Manor',      username: 'asaf_m',   email: 'asaf@hevre.app',   position: 'RB',  rating: 7.2, goals: 1,  assists: 4,  cleanSheets: 0,  gamesPlayed: 17, neighborhood: 'Petah Tikva',      paid: true  },
   { id: 25, name: 'Lev Rosenberg',   username: 'lev_r',    email: 'lev@hevre.app',    position: 'LW',  rating: 7.6, goals: 9,  assists: 11, cleanSheets: 0,  gamesPlayed: 21, neighborhood: 'Ramat Gan',        paid: true  },
   { id: 26, name: 'Tom Hayat',       username: 'tom_h',    email: 'tom@hevre.app',    position: 'CF',  rating: 7.8, goals: 14, assists: 8,  cleanSheets: 0,  gamesPlayed: 24, neighborhood: 'Tel Aviv',         paid: false },
   { id: 27, name: 'Eden Cohen',      username: 'eden_c',   email: 'eden@hevre.app',   position: 'CB',  rating: 7.1, goals: 0,  assists: 2,  cleanSheets: 0,  gamesPlayed: 16, neighborhood: 'Givatayim',        paid: true  },
   { id: 28, name: 'Aviv Barel',      username: 'aviv_b',   email: 'aviv@hevre.app',   position: 'GK',  rating: 7.5, goals: 0,  assists: 1,  cleanSheets: 10, gamesPlayed: 22, neighborhood: 'Tel Aviv',         paid: true  },
-  { id: 29, name: 'Yuval Dahan',     username: 'yuval_d',  email: 'yuval@hevre.app',  position: 'CM',  rating: 7.9, goals: 8,  assists: 14, cleanSheets: 0,  gamesPlayed: 26, neighborhood: 'Rishon LeZion',    paid: true  },
-  { id: 30, name: 'Or Nachmani',     username: 'or_n',     email: 'or@hevre.app',     position: 'ST',  rating: 8.3, goals: 27, assists: 9,  cleanSheets: 0,  gamesPlayed: 29, neighborhood: 'Ramat Gan',        paid: true  },
+  { id: 29, name: 'Yuval Dahan',     username: 'yuval_d',  email: 'yuval@hevre.app',  position: 'CM',  rating: 7.9, goals: 8,  assists: 14, cleanSheets: 0,  gamesPlayed: 26, neighborhood: 'Rishon LeZion',    paid: true,  bio: "Box-to-box midfielder. I run the most every game and I'm proud of it. Fitness is half the game." },
+  { id: 30, name: 'Or Nachmani',     username: 'or_n',     email: 'or@hevre.app',     position: 'ST',  rating: 8.3, goals: 27, assists: 9,  cleanSheets: 0,  gamesPlayed: 29, neighborhood: 'Ramat Gan',        paid: true,  bio: "Born winner. Every ball is a chance, every chance is a goal. Ramat Gan in the blood." },
 ]
 
 export const LOCATIONS = [
@@ -236,7 +236,7 @@ export function formatDate(dateStr) {
 }
 
 export function spotsLeft(game) {
-  return game.spotsTotal - game.playerIds.length
+  return Math.max(0, game.spotsTotal - game.playerIds.length)
 }
 
 export function fieldIcon(type) {

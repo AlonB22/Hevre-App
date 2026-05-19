@@ -10,7 +10,8 @@ import MyStats   from './components/MyStats'
 import Players   from './components/Players'
 import Stats     from './components/Stats'
 import Payments  from './components/Payments'
-import GameModal from './components/GameModal'
+import GameModal    from './components/GameModal'
+import ProfileModal from './components/ProfileModal'
 
 export default function App() {
   const [user,        setUser]        = useState(null)
@@ -20,9 +21,15 @@ export default function App() {
   const [players]                     = useState(PLAYERS)
   const [ratings,     setRatings]     = useState(INITIAL_RATINGS)
   const [modalGame,   setModalGame]   = useState(null)
+  const [viewPlayer,  setViewPlayer]  = useState(null)
+  const [userBios,    setUserBios]    = useState({})
+  const [userPics,    setUserPics]    = useState({})
 
   const handleLogin  = (player) => { setUser(player); setView('dashboard') }
-  const handleLogout = () => { setUser(null); setSidebarOpen(false) }
+  const handleLogout = () => { setUser(null); setSidebarOpen(false); setViewPlayer(null) }
+
+  const handleSaveBio = (bio) => setUserBios(prev => ({ ...prev, [user.id]: bio }))
+  const handleSavePic = (pic) => setUserPics(prev => ({ ...prev, [user.id]: pic }))
 
   const handleRsvp = (gameId, joining) => {
     setGames(prev => prev.map(g => {
@@ -52,7 +59,7 @@ export default function App() {
     return <Login players={players} onLogin={handleLogin} />
   }
 
-  const pageProps = { user, players, games, ratings, onRsvp: handleRsvp, setView }
+  const pageProps = { user, players, games, ratings, onRsvp: handleRsvp, setView, onViewPlayer: setViewPlayer }
 
   return (
     <div className="app">
@@ -71,6 +78,8 @@ export default function App() {
         open={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
         onLogout={handleLogout}
+        onOpenProfile={() => setViewPlayer(user)}
+        userPic={userPics[user?.id] ?? null}
       />
 
       {sidebarOpen && (
@@ -95,6 +104,19 @@ export default function App() {
           ratings={ratings}
           onRate={handleRate}
           onClose={() => setModalGame(null)}
+          onViewPlayer={setViewPlayer}
+        />
+      )}
+
+      {viewPlayer && (
+        <ProfileModal
+          player={viewPlayer}
+          isOwn={viewPlayer.id === user?.id}
+          bio={userBios[viewPlayer.id]}
+          pic={userPics[viewPlayer.id]}
+          onSaveBio={handleSaveBio}
+          onSavePic={handleSavePic}
+          onClose={() => setViewPlayer(null)}
         />
       )}
     </div>

@@ -1,7 +1,7 @@
 import { X } from 'lucide-react'
 import { LOCATIONS, formatDate, initials, avatarColor } from '../data'
 
-export default function GameModal({ game, players, user, ratings, onRate, onClose }) {
+export default function GameModal({ game, players, user, ratings, onRate, onClose, onViewPlayer }) {
   const loc = LOCATIONS.find(l => l.id === game.locationId)
   const gameRatings = ratings[game.id] ?? {}
 
@@ -89,6 +89,7 @@ export default function GameModal({ game, players, user, ratings, onRate, onClos
               avgRating={avgRating}
               myRatingOf={myRatingOf}
               onRate={handleRate}
+              onViewPlayer={onViewPlayer}
             />
           )}
           {teamBPlayers.length > 0 && (
@@ -102,6 +103,7 @@ export default function GameModal({ game, players, user, ratings, onRate, onClos
               avgRating={avgRating}
               myRatingOf={myRatingOf}
               onRate={handleRate}
+              onViewPlayer={onViewPlayer}
             />
           )}
           {extraPlayers.length > 0 && (
@@ -115,6 +117,7 @@ export default function GameModal({ game, players, user, ratings, onRate, onClos
               avgRating={avgRating}
               myRatingOf={myRatingOf}
               onRate={handleRate}
+              onViewPlayer={onViewPlayer}
             />
           )}
         </div>
@@ -123,7 +126,7 @@ export default function GameModal({ game, players, user, ratings, onRate, onClos
   )
 }
 
-function TeamCol({ label, accent, players, game, user, isInGame, avgRating, myRatingOf, onRate }) {
+function TeamCol({ label, accent, players, game, user, isInGame, avgRating, myRatingOf, onRate, onViewPlayer }) {
   return (
     <div className={`modal-team modal-team-${accent}`}>
       <div className="modal-team-label">{label}</div>
@@ -136,7 +139,10 @@ function TeamCol({ label, accent, players, game, user, isInGame, avgRating, myRa
 
         return (
           <div key={p.id} className={`modal-player${isMe ? ' modal-player-me' : ''}`}>
-            <div className="modal-player-left">
+            <div
+              className="modal-player-left player-clickable"
+              onClick={() => onViewPlayer?.(p)}
+            >
               <div className="modal-av" style={{ background: avatarColor(p.id) }}>
                 {initials(p.name)}
               </div>
@@ -165,7 +171,7 @@ function TeamCol({ label, accent, players, game, user, isInGame, avgRating, myRa
             </div>
 
             {canRate && (
-              <div className="rate-col">
+              <div className="rate-col" onClick={e => e.stopPropagation()}>
                 <span className="rate-label">
                   {myRate ? `Your rating: ${myRate}` : 'Rate'}
                 </span>

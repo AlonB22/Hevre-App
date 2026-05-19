@@ -6,7 +6,6 @@ const QUICK = [
   { id: 1,  sub: 'CAM · Ramat Gan' },
   { id: 2,  sub: 'GK · Tel Aviv'   },
   { id: 3,  sub: 'ST · Givatayim'  },
-  { id: 20, sub: 'CAM · Tel Aviv'  },
 ]
 
 export default function Login({ players, onLogin }) {

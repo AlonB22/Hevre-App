@@ -136,7 +136,10 @@ export default function FindMatches({ user, games, onRsvp }) {
               <p>No games match your filters.</p>
             </div>
           )}
-          {filtered.map(game => {
+          {(selected
+            ? [selected, ...filtered.filter(g => g.id !== selected.id)]
+            : filtered
+          ).map(game => {
             const loc  = LOCATIONS.find(l => l.id === game.locationId)
             const isIn = game.playerIds.includes(user.id)
             const left = spotsLeft(game)
