@@ -681,6 +681,343 @@ input, select, textarea { cursor: text; }
   .mystats-view-hint { display: none; }
 }
 
+/* ── Badges extra ──────────────────────────────────────────── */
+.bdg-brown { background: rgba(122,80,66,0.15); color: var(--brown-hi); border-color: rgba(122,80,66,0.3); }
+.btn-danger { background: var(--rust); color: #fff; border: none; }
+.btn-danger:hover { opacity: .85; }
+
+/* ── Match Manager Modal ────────────────────────────────────── */
+.mm-modal {
+  max-width: 860px;
+  width: 100%;
+  padding: 28px 28px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+}
+
+.mm-hdr {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.mm-hdr-badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+
+.mm-admin-btns {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+/* Balance badge colours */
+.mm-bal-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .3px;
+  border: 1.5px solid;
+}
+.bal-great { background: rgba(74,133,98,.15);  color: #3a8c60; border-color: rgba(74,133,98,.4); }
+.bal-ok    { background: rgba(74,133,98,.08);  color: #5a7c6a; border-color: rgba(74,133,98,.25); }
+.bal-warn  { background: rgba(196,137,42,.15); color: var(--ochre); border-color: rgba(196,137,42,.4); }
+.bal-bad   { background: rgba(184,94,56,.15);  color: var(--rust);  border-color: rgba(184,94,56,.4); }
+
+/* Teams layout */
+.mm-teams-wrap {
+  display: grid;
+  grid-template-columns: 1fr 64px 1fr;
+  gap: 0;
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.mm-team {
+  display: flex;
+  flex-direction: column;
+  background: var(--card-bg);
+}
+
+.mm-team-green { border-right: 1px solid var(--border); }
+.mm-team-brown { border-left: 1px solid var(--border); }
+
+.mm-team-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 2px solid var(--border);
+}
+
+.mm-team-green .mm-team-hdr { background: rgba(45,92,62,.08); }
+.mm-team-brown .mm-team-hdr { background: rgba(122,80,66,.08); }
+
+.mm-team-name {
+  font-size: 13px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+.mm-team-green .mm-team-name { color: var(--green); }
+.mm-team-brown .mm-team-name { color: var(--brown-hi); }
+
+.mm-team-total {
+  font-size: 12px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 99px;
+  background: var(--border);
+  color: var(--text-2);
+}
+
+.mm-player {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border-lgt);
+  transition: background .12s;
+}
+.mm-player:last-child { border-bottom: none; }
+.mm-player-me { background: rgba(45,92,62,.06); }
+
+.mm-av {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 800;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.mm-player-info {
+  flex: 1;
+  min-width: 0;
+}
+.mm-player-info strong { display: block; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mm-player-info span   { font-size: 11px; color: var(--muted); }
+
+.mm-rating {
+  font-size: 14px;
+  font-weight: 900;
+  color: var(--green-hi);
+  flex-shrink: 0;
+}
+
+.mm-swap-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--border);
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background .12s, transform .1s;
+}
+.mm-swap-btn:hover { background: var(--green-hi); color: #fff; transform: scale(1.1); }
+
+.mm-empty-team {
+  padding: 20px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* VS center column */
+.mm-vs-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--border);
+  padding: 16px 8px;
+}
+.mm-vs-label {
+  font-size: 11px;
+  font-weight: 900;
+  color: var(--muted);
+  letter-spacing: 1px;
+}
+.mm-vs-total {
+  font-size: 18px;
+  font-weight: 900;
+}
+.mm-vs-diff {
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 6px;
+  margin-top: 4px;
+}
+.mm-vs-diff.bal-great { background: rgba(74,133,98,.2);  color: #3a8c60; }
+.mm-vs-diff.bal-ok    { background: rgba(74,133,98,.1);  color: #5a7c6a; }
+.mm-vs-diff.bal-warn  { background: rgba(196,137,42,.2); color: var(--ochre); }
+.mm-vs-diff.bal-bad   { background: rgba(184,94,56,.2);  color: var(--rust); }
+
+/* Hidden teams */
+.mm-hidden {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 48px 24px;
+  border: 2px dashed var(--border);
+  border-radius: 16px;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* Unassigned players */
+.mm-unassigned {
+  padding: 14px 16px;
+  background: var(--surface-2);
+  border-radius: 12px;
+  border: 1.5px dashed var(--border);
+}
+.mm-ua-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.mm-ua-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px 5px 6px;
+  background: var(--card-bg);
+  border: 1.5px solid var(--border);
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.mm-av-sm {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 800;
+  color: #fff;
+}
+.mm-ua-btn {
+  padding: 2px 7px;
+  border-radius: 99px;
+  border: none;
+  font-size: 10px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.mm-ua-btn.green { background: rgba(45,92,62,.15); color: var(--green); }
+.mm-ua-btn.brown { background: rgba(122,80,66,.15); color: var(--brown-hi); }
+.mm-ua-btn:hover { opacity: .75; }
+
+/* Score bar */
+.mm-score-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--surface-2);
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  padding: 12px 20px;
+}
+.mm-score-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  min-width: 80px;
+}
+.mm-score-item span  { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+.mm-score-item strong{ font-size: 22px; font-weight: 900; }
+.mm-score-diff {
+  font-size: 13px;
+  font-weight: 800;
+  padding: 6px 16px;
+  border-radius: 99px;
+}
+
+/* Footer note */
+.mm-footer-note {
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+  padding-top: 4px;
+  border-top: 1px solid var(--border-lgt);
+}
+
+/* ── Balance Feedback (inside GameModal) ─────────────────────── */
+.balance-feedback {
+  padding: 16px 20px;
+  background: var(--surface-2);
+  border-radius: 14px;
+  border: 1.5px solid var(--border);
+  margin-bottom: 4px;
+}
+.balance-fb-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  margin-bottom: 10px;
+}
+.balance-seg {
+  display: flex;
+  gap: 0;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.balance-seg-btn {
+  flex: 1;
+  padding: 8px 6px;
+  font-size: 12px;
+  font-weight: 700;
+  background: var(--card-bg);
+  border: none;
+  border-right: 1.5px solid var(--border);
+  cursor: pointer;
+  color: var(--text-2);
+  transition: background .15s, color .15s;
+}
+.balance-seg-btn:last-child { border-right: none; }
+.balance-seg-btn.active {
+  background: var(--green-hi);
+  color: #fff;
+}
+.balance-seg-btn:hover:not(.active) { background: var(--border); }
+
+@media (max-width: 600px) {
+  .mm-teams-wrap { grid-template-columns: 1fr; }
+  .mm-vs-col { flex-direction: row; padding: 10px 16px; }
+  .mm-team-green { border-right: none; border-bottom: 2px solid var(--border); }
+  .mm-team-brown { border-left: none; border-top: 2px solid var(--border); }
+}
+
 /* ── Profile Modal ─────────────────────────────────────────── */
 .profile-modal {
   max-width: 460px;

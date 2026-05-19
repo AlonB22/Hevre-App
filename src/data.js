@@ -243,3 +243,17 @@ export function fieldIcon(type) {
   const icons = { turf: '🟩', grass: '🌿', indoor: '🏢', sand: '🏖️' }
   return icons[type] ?? '⚽'
 }
+
+// Greedy team balancer — assigns the next highest-rated player to whichever
+// team currently has the lower total rating, producing the fairest split.
+export function autoBalance(players) {
+  const sorted = [...players].sort((a, b) => b.rating - a.rating)
+  const teamA = [], teamB = []
+  for (const player of sorted) {
+    const sumA = teamA.reduce((s, p) => s + p.rating, 0)
+    const sumB = teamB.reduce((s, p) => s + p.rating, 0)
+    if (sumA <= sumB) teamA.push(player)
+    else teamB.push(player)
+  }
+  return { teamA, teamB }
+}

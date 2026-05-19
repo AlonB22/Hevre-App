@@ -1,7 +1,7 @@
 import { X } from 'lucide-react'
 import { LOCATIONS, formatDate, initials, avatarColor } from '../data'
 
-export default function GameModal({ game, players, user, ratings, onRate, onClose, onViewPlayer }) {
+export default function GameModal({ game, players, user, ratings, onRate, onClose, onViewPlayer, feedback, onSaveFeedback }) {
   const loc = LOCATIONS.find(l => l.id === game.locationId)
   const gameRatings = ratings[game.id] ?? {}
 
@@ -74,6 +74,34 @@ export default function GameModal({ game, players, user, ratings, onRate, onClos
 
         {!isInGame && (
           <div className="modal-note">You were not in this game. Viewing only.</div>
+        )}
+
+        {/* Balance Feedback (past games only) */}
+        {game.teamA && (
+          <div className="balance-feedback">
+            <div className="balance-fb-label">How was the team balance?</div>
+            <div className="balance-seg">
+              {['Team A stronger', 'Balanced', 'Team B stronger'].map(opt => (
+                <button
+                  key={opt}
+                  className={`balance-seg-btn${feedback?.balance === opt ? ' active' : ''}`}
+                  onClick={() => onSaveFeedback?.(game.id, { ...(feedback ?? {}), balance: opt })}
+                >
+                  {opt}
+                </button>
+              ))}
+            </div>
+            {feedback?.balance && (
+              <textarea
+                className="profile-textarea"
+                value={feedback?.note ?? ''}
+                onChange={e => onSaveFeedback?.(game.id, { ...feedback, note: e.target.value })}
+                placeholder="Add a note for next week's split… (optional)"
+                rows={2}
+                style={{ marginTop: 10 }}
+              />
+            )}
+          </div>
         )}
 
         {/* Teams */}

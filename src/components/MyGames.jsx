@@ -1,7 +1,7 @@
 import { CalendarDays, Clock, MapPin, Users } from 'lucide-react'
 import { LOCATIONS, formatDate, spotsLeft } from '../data'
 
-export default function MyGames({ user, games, onRsvp, setView, onOpenModal }) {
+export default function MyGames({ user, games, onRsvp, setView, onOpenModal, onOpenManager, publishedGames }) {
   const myUpcoming = games
     .filter(g => g.status === 'upcoming' && g.playerIds.includes(user.id))
     .sort((a, b) => a.date.localeCompare(b.date))
@@ -36,7 +36,14 @@ export default function MyGames({ user, games, onRsvp, setView, onOpenModal }) {
           <div className="sec-title">Upcoming ({myUpcoming.length})</div>
           <div className="gc-grid">
             {myUpcoming.map(g => (
-              <GameCard key={g.id} game={g} user={user} onRsvp={onRsvp} />
+              <GameCard
+                key={g.id}
+                game={g}
+                user={user}
+                onRsvp={onRsvp}
+                onManage={() => onOpenManager(g)}
+                isPublished={publishedGames?.has(g.id)}
+              />
             ))}
           </div>
         </section>
@@ -56,17 +63,20 @@ export default function MyGames({ user, games, onRsvp, setView, onOpenModal }) {
   )
 }
 
-function GameCard({ game, user, onRsvp }) {
-  const loc  = LOCATIONS.find(l => l.id === game.locationId)
-  const left = spotsLeft(game)
-  const paid = game.paidIds?.includes(user.id)
-  const pct  = Math.round((game.playerIds.length / game.spotsTotal) * 100)
+function GameCard({ game, user, onRsvp, onManage, isPublished }) {
+  const loc      = LOCATIONS.find(l => l.id === game.locationId)
+  const left     = spotsLeft(game)
+  const paid     = game.paidIds?.includes(user.id)
+  const pct      = Math.round((game.playerIds.length / game.spotsTotal) * 100)
+  const isOrg    = user.id === game.organizerId
 
   return (
     <div className="game-card no-hover">
       <div className="gc-top">
         <span className="format-bdg">{game.format}</span>
         <span className="bdg bdg-green">Joined</span>
+        {isOrg && <span className="bdg bdg-brown">Organizer</span>}
+        {isPublished && !isOrg && <span className="bdg bdg-green" style={{ marginLeft: 'auto' }}>Teams Live</span>}
         {paid
           ? <span className="bdg bdg-green" style={{ marginLeft: 'auto' }}>Paid ✓</span>
           : <span className="bdg bdg-red"   style={{ marginLeft: 'auto' }}>Unpaid</span>
@@ -88,12 +98,20 @@ function GameCard({ game, user, onRsvp }) {
         </div>
         <span>{left > 0 ? `${left} spots left` : 'Full'}</span>
       </div>
-      <button
-        className="btn btn-danger btn-sm"
-        onClick={() => onRsvp(game.id, false)}
-      >
-        Leave game
-      </button>
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+        <button
+          className="btn btn-primary btn-sm"
+          onClick={onManage}
+        >
+          {isOrg ? '⚙ Manage teams' : '👥 View teams'}
+        </button>
+        <button
+          className="btn btn-danger btn-sm"
+          onClick={() => onRsvp(game.id, false)}
+        >
+          Leave
+        </button>
+      </div>
     </div>
   )
 }
