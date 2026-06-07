@@ -3,6 +3,10 @@ import {
   PLAYERS, GAMES, LOCATIONS, INITIAL_RATINGS, PASSWORD,
   avatarColor, initials, formatDate, spotsLeft, fieldIcon,
 } from '../data'
+import {
+  initialRating, displayRating, conservativeScore,
+  certaintyLabel, matchQuality, autoBalanceTS, buildInitialRatings,
+} from '../trueskill'
 
 // ─── Utility functions ───────────────────────────────────────────────
 
@@ -89,12 +93,12 @@ describe('PASSWORD', () => {
 })
 
 describe('PLAYERS array', () => {
-  it('has exactly 30 players', () => {
-    expect(PLAYERS).toHaveLength(30)
+  it('has exactly 45 players', () => {
+    expect(PLAYERS).toHaveLength(45)
   })
   it('every player has a unique id', () => {
     const ids = PLAYERS.map(p => p.id)
-    expect(new Set(ids).size).toBe(30)
+    expect(new Set(ids).size).toBe(45)
   })
   it('every player has all required fields', () => {
     const required = ['id','name','username','email','position','rating','goals','assists','gamesPlayed','neighborhood']
@@ -122,7 +126,7 @@ describe('PLAYERS array', () => {
   })
   it('no duplicate emails', () => {
     const emails = PLAYERS.map(p => p.email)
-    expect(new Set(emails).size).toBe(30)
+    expect(new Set(emails).size).toBe(45)
   })
 })
 
@@ -193,6 +197,87 @@ describe('GAMES array', () => {
   it('game ids are unique', () => {
     const ids = GAMES.map(g => g.id)
     expect(new Set(ids).size).toBe(GAMES.length)
+  })
+})
+
+describe('TrueSkill', () => {
+  const veteran  = PLAYERS.find(p => p.gamesPlayed >= 25)   // e.g. Alon (28 games)
+  const newcomer = PLAYERS.find(p => p.gamesPlayed <= 8)    // e.g. Liron (6 games)
+
+  it('initialRating gives veterans lower sigma than newcomers', () => {
+    const vRating = initialRating(veteran)
+    const nRating = initialRating(newcomer)
+    expect(vRating.sigma).toBeLessThan(nRating.sigma)
+  })
+
+  it('veteran is labelled Established', () => {
+    const r = initialRating(veteran)
+    expect(certaintyLabel(r.sigma).label).toBe('Established')
+  })
+
+  it('newcomer is labelled Unranked', () => {
+    const r = initialRating(newcomer)
+    expect(certaintyLabel(r.sigma).label).toBe('Unranked')
+  })
+
+  it('displayRating converts mu back to 0–10 scale', () => {
+    const r = initialRating(veteran)
+    const displayed = parseFloat(displayRating(r))
+    expect(displayed).toBeCloseTo(veteran.rating, 0)
+  })
+
+  it('conservativeScore is always less than displayRating', () => {
+    for (const p of PLAYERS) {
+      const r = initialRating(p)
+      expect(parseFloat(conservativeScore(r))).toBeLessThan(parseFloat(displayRating(r)))
+    }
+  })
+
+  it('matchQuality returns 0 for empty teams', () => {
+    expect(matchQuality([], [], {})).toBe(0)
+  })
+
+  it('matchQuality returns 0–100 for two real teams', () => {
+    const tsR = buildInitialRatings(PLAYERS, [])
+    const teamA = PLAYERS.slice(0, 5)
+    const teamB = PLAYERS.slice(5, 10)
+    const q = matchQuality(teamA, teamB, tsR)
+    expect(q).toBeGreaterThanOrEqual(0)
+    expect(q).toBeLessThanOrEqual(100)
+  })
+
+  it('autoBalanceTS splits players into two groups covering all input players', () => {
+    const tsR = buildInitialRatings(PLAYERS, [])
+    const group = PLAYERS.slice(0, 10)
+    const { teamA, teamB } = autoBalanceTS(group, tsR)
+    expect(teamA.length + teamB.length).toBe(10)
+    const covered = new Set([...teamA.map(p => p.id), ...teamB.map(p => p.id)])
+    for (const p of group) expect(covered.has(p.id)).toBe(true)
+  })
+
+  it('balanced teams have close TrueSkill mu sums (diff < 10 internal pts)', () => {
+    const tsR = buildInitialRatings(PLAYERS, [])
+    const group = PLAYERS.slice(0, 14)
+    const { teamA, teamB } = autoBalanceTS(group, tsR)
+    const sumA = teamA.reduce((s, p) => s + tsR[p.id].mu, 0)
+    const sumB = teamB.reduce((s, p) => s + tsR[p.id].mu, 0)
+    expect(Math.abs(sumA - sumB)).toBeLessThan(10)
+  })
+
+  it('buildInitialRatings returns a rating for every player', () => {
+    const pastGames = GAMES.filter(g => g.status === 'past')
+    const ratings = buildInitialRatings(PLAYERS, pastGames)
+    for (const p of PLAYERS) {
+      expect(ratings[p.id]).toBeDefined()
+    }
+  })
+
+  it('after replaying past games winners have higher mu than their initial', () => {
+    // Game 101: Team A won 4-3. Player 1 (Alon) was on Team A.
+    const alonInitial = initialRating(PLAYERS[0]).mu
+    const pastGames   = GAMES.filter(g => g.status === 'past')
+    const ratings     = buildInitialRatings(PLAYERS, pastGames)
+    expect(ratings[1].mu).toBeGreaterThan(alonInitial)
   })
 })
 
