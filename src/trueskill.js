@@ -38,10 +38,17 @@ import { TrueSkill, Rating } from 'ts-trueskill'
 export const env = new TrueSkill(35, 6, 3, 0.3, 0.15)
 
 // ── Initialise a player's TrueSkill rating from their static data.js rating ─
-// Players with many games played get lower sigma (we're more certain about them).
+// Sigma formula: 6 − (gamesPlayed × 0.2), floored at 1.2.
+// This maps experience to certainty:
+//   6  games → σ ≈ 4.8  → Unranked     (brand new)
+//   12 games → σ ≈ 3.6  → Unranked
+//   15 games → σ ≈ 3.0  → Calibrating
+//   20 games → σ ≈ 2.0  → Calibrating (border)
+//   22 games → σ ≈ 1.6  → Established
+//   25+ games→ σ = 1.2  → Established (floor)
 export function initialRating(player) {
   const mu    = player.rating * 5
-  const sigma = Math.max(1.5, 6 - player.gamesPlayed * 0.1)
+  const sigma = Math.max(1.2, 6 - player.gamesPlayed * 0.2)
   return env.createRating(mu, sigma)
 }
 
@@ -58,10 +65,14 @@ export function conservativeScore(tsRating) {
 }
 
 // ── Uncertainty label ─────────────────────────────────────────────────────────
+// Thresholds aligned with the initialRating sigma formula:
+//   σ < 2.2  → Established  (22+ games played)
+//   σ < 3.2  → Calibrating  (14–21 games)
+//   otherwise → Unranked     (<14 games)
 export function certaintyLabel(sigma) {
-  if (sigma < 2)   return { label: 'Established', cls: 'ts-certain' }
-  if (sigma < 3.5) return { label: 'Calibrating', cls: 'ts-mid' }
-  return              { label: 'Unranked',    cls: 'ts-uncertain' }
+  if (sigma < 2.2) return { label: 'Established', cls: 'ts-certain' }
+  if (sigma < 3.2) return { label: 'Calibrating', cls: 'ts-mid' }
+  return                  { label: 'Unranked',    cls: 'ts-uncertain' }
 }
 
 // ── Replay a single past game and return updated tsRatings map ────────────────
