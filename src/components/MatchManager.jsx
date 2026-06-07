@@ -1,5 +1,6 @@
 import { EyeOff, RefreshCw, X } from 'lucide-react'
 import { LOCATIONS, formatDate, initials, avatarColor } from '../data'
+import { matchQuality, qualityGrade, displayRating } from '../trueskill'
 
 export default function MatchManager({
   game,
@@ -7,6 +8,7 @@ export default function MatchManager({
   user,
   assignments,   // { teamA: [ids], teamB: [ids] }
   published,     // boolean
+  tsRatings,     // live TrueSkill ratings map { [playerId]: Rating }
   onAutoBalance,
   onSwap,        // (gameId, playerId, fromTeam) — 'A' | 'B' | null
   onAssign,      // (gameId, playerId, toTeam) — for unassigned players
@@ -24,15 +26,15 @@ export default function MatchManager({
   const assignedIds = new Set([...(assignments?.teamA ?? []), ...(assignments?.teamB ?? [])])
   const unassigned  = gamePlayers.filter(p => !assignedIds.has(p.id))
 
-  const sumA = teamAPlayers.reduce((s, p) => s + p.rating, 0)
-  const sumB = teamBPlayers.reduce((s, p) => s + p.rating, 0)
+  // Use TrueSkill μ for sums when available, else fall back to static rating
+  const tsScore = (p) => tsRatings?.[p.id] ? tsRatings[p.id].mu / 5 : p.rating
+  const sumA = teamAPlayers.reduce((s, p) => s + tsScore(p), 0)
+  const sumB = teamBPlayers.reduce((s, p) => s + tsScore(p), 0)
   const diff = Math.abs(sumA - sumB)
 
-  const [balanceLabel, balanceCls] =
-    diff < 0.5 ? ['Perfectly balanced', 'bal-great'] :
-    diff < 1.5 ? ['Well balanced',      'bal-ok']    :
-    diff < 3.0 ? ['Slightly uneven',    'bal-warn']  :
-                 ['Uneven — fix needed','bal-bad']
+  // TrueSkill quality — much more meaningful than a simple point diff
+  const quality = matchQuality(teamAPlayers, teamBPlayers, tsRatings ?? {})
+  const { label: balanceLabel, cls: balanceCls } = qualityGrade(quality)
 
   const canSeeTeams = isAdmin || published
 
@@ -75,15 +77,20 @@ export default function MatchManager({
           )}
         </div>
 
-        {/* Balance score bar — visible to all */}
+        {/* TrueSkill balance bar — visible to all who can see teams */}
         {canSeeTeams && (
           <div className="mm-score-bar">
             <div className="mm-score-item">
               <span>Team A</span>
               <strong style={{ color: 'var(--green-hi)' }}>{sumA.toFixed(1)}</strong>
             </div>
-            <div className={`mm-score-diff ${balanceCls}`}>
-              {diff < 0.05 ? '⚖ Even' : `Δ ${diff.toFixed(1)} pts`}
+            <div className="mm-score-center">
+              <div className={`mm-score-diff ${balanceCls}`}>
+                {diff < 0.05 ? '⚖ Even' : `Δ ${diff.toFixed(1)}`}
+              </div>
+              <div className="mm-quality-pct" title="TrueSkill match quality — probability both teams are evenly matched">
+                🎯 {quality}% fair
+              </div>
             </div>
             <div className="mm-score-item">
               <span>Team B</span>
@@ -114,6 +121,7 @@ export default function MatchManager({
               total={sumA}
               isAdmin={isAdmin}
               user={user}
+              tsRatings={tsRatings}
               onSwap={pid => onSwap(game.id, pid, 'A')}
             />
 
@@ -133,6 +141,7 @@ export default function MatchManager({
               total={sumB}
               isAdmin={isAdmin}
               user={user}
+              tsRatings={tsRatings}
               onSwap={pid => onSwap(game.id, pid, 'B')}
             />
           </div>
@@ -162,9 +171,8 @@ export default function MatchManager({
         {/* Info footer */}
         {isAdmin && (
           <div className="mm-footer-note">
-            Click a player's ⇄ button to move them to the other team.
-            Auto-balance uses a greedy rating algorithm.
-            {' '}<a href="#ai" style={{ color: 'var(--green-hi)' }}>AI balancing →</a>
+            Auto-balance uses live <strong>TrueSkill</strong> μ ratings — updated from real game results.
+            Click ⇄ to manually swap players. Match quality % = TrueSkill draw probability.
           </div>
         )}
       </div>
@@ -172,7 +180,7 @@ export default function MatchManager({
   )
 }
 
-function TeamCol({ name, accent, players, total, isAdmin, user, onSwap }) {
+function TeamCol({ name, accent, players, total, isAdmin, user, tsRatings, onSwap }) {
   return (
     <div className={`mm-team mm-team-${accent}`}>
       <div className="mm-team-hdr">
@@ -185,7 +193,10 @@ function TeamCol({ name, accent, players, total, isAdmin, user, onSwap }) {
       )}
 
       {players.map(p => {
-        const isMe = p.id === user.id
+        const isMe    = p.id === user.id
+        const tsR     = tsRatings?.[p.id]
+        const liveRating = tsR ? displayRating(tsR) : p.rating.toFixed(1)
+        const changed    = tsR && Math.abs(tsR.mu / 5 - p.rating) >= 0.05
         return (
           <div key={p.id} className={`mm-player${isMe ? ' mm-player-me' : ''}`}>
             <div className="mm-av" style={{ background: avatarColor(p.id) }}>
@@ -195,7 +206,10 @@ function TeamCol({ name, accent, players, total, isAdmin, user, onSwap }) {
               <strong>{p.name.split(' ')[0]}{isMe ? ' (you)' : ''}</strong>
               <span>{p.position}</span>
             </div>
-            <div className="mm-rating">{p.rating}</div>
+            <div className="mm-rating" title={changed ? `Base: ${p.rating} → Live TrueSkill: ${liveRating}` : 'TrueSkill rating'}>
+              {liveRating}
+              {changed && <span className="mm-ts-dot" />}
+            </div>
             {isAdmin && (
               <button
                 className="mm-swap-btn"

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
 import { PLAYERS, GAMES, INITIAL_RATINGS, autoBalance } from './data'
+import { buildInitialRatings, autoBalanceTS, processGameResult } from './trueskill'
 import Login     from './components/Login'
 import Sidebar   from './components/Sidebar'
 import Dashboard from './components/Dashboard'
@@ -22,18 +23,26 @@ export default function App() {
   const [players]                     = useState(PLAYERS)
   const [ratings,     setRatings]     = useState(INITIAL_RATINGS)
   const [modalGame,   setModalGame]   = useState(null)
+
+  // TrueSkill live ratings — initialised once by replaying all past games
+  const [tsRatings, setTsRatings] = useState(() => {
+    const pastGames = GAMES.filter(g => g.status === 'past')
+    return buildInitialRatings(PLAYERS, pastGames)
+  })
   const [viewPlayer,      setViewPlayer]      = useState(null)
   const [userBios,        setUserBios]        = useState({})
   const [userPics,        setUserPics]        = useState({})
   const [managerGame,     setManagerGame]     = useState(null)
   const [gameFeedback,    setGameFeedback]    = useState({})
 
-  // Pre-balance every upcoming game that has players, so teams are always ready
+  // Pre-balance every upcoming game using TrueSkill μ so teams are always ready
   const [teamAssignments, setTeamAssignments] = useState(() => {
+    const pastGames = GAMES.filter(g => g.status === 'past')
+    const tsInit    = buildInitialRatings(PLAYERS, pastGames)
     const result = {}
     for (const game of GAMES.filter(g => g.status === 'upcoming' && g.playerIds.length >= 2)) {
       const gamePlayers = game.playerIds.map(id => PLAYERS.find(p => p.id === id)).filter(Boolean)
-      const { teamA, teamB } = autoBalance(gamePlayers)
+      const { teamA, teamB } = autoBalanceTS(gamePlayers, tsInit)
       result[game.id] = { teamA: teamA.map(p => p.id), teamB: teamB.map(p => p.id) }
     }
     return result
@@ -55,11 +64,17 @@ export default function App() {
   const handleAutoBalance = (gameId) => {
     const game = games.find(g => g.id === gameId)
     const gamePlayers = game.playerIds.map(id => players.find(p => p.id === id)).filter(Boolean)
-    const { teamA, teamB } = autoBalance(gamePlayers)
+    const { teamA, teamB } = autoBalanceTS(gamePlayers, tsRatings)
     setTeamAssignments(prev => ({
       ...prev,
       [gameId]: { teamA: teamA.map(p => p.id), teamB: teamB.map(p => p.id) },
     }))
+  }
+
+  // When a past game result is saved, update TrueSkill ratings for all participants
+  const handleGameResult = (game, winner) => {
+    if (!game.teamA || !game.teamB) return
+    setTsRatings(prev => processGameResult(prev, game.teamA, game.teamB, winner))
   }
 
   const handleSwapPlayer = (gameId, playerId, fromTeam) => {
@@ -134,6 +149,7 @@ export default function App() {
 
   const pageProps = {
     user, players, games, ratings,
+    tsRatings,
     onRsvp: handleRsvp, setView,
     onViewPlayer: setViewPlayer,
     onOpenManager: handleOpenManager,
@@ -196,6 +212,7 @@ export default function App() {
           user={user}
           assignments={teamAssignments[managerGame.id]}
           published={publishedGames.has(managerGame.id)}
+          tsRatings={tsRatings}
           onAutoBalance={handleAutoBalance}
           onSwap={handleSwapPlayer}
           onAssign={handleAssignPlayer}
@@ -210,6 +227,7 @@ export default function App() {
           isOwn={viewPlayer.id === user?.id}
           bio={userBios[viewPlayer.id]}
           pic={userPics[viewPlayer.id]}
+          tsRating={tsRatings[viewPlayer.id]}
           onSaveBio={handleSaveBio}
           onSavePic={handleSavePic}
           onClose={() => setViewPlayer(null)}

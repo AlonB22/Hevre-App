@@ -953,11 +953,34 @@ input, select, textarea { cursor: text; }
 }
 .mm-score-item span  { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
 .mm-score-item strong{ font-size: 22px; font-weight: 900; }
+.mm-score-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
 .mm-score-diff {
   font-size: 13px;
   font-weight: 800;
   padding: 6px 16px;
   border-radius: 99px;
+}
+/* TrueSkill quality % shown below the diff */
+.mm-quality-pct {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: .3px;
+}
+/* Small dot indicator on a rating that has been updated by TrueSkill */
+.mm-ts-dot {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--green-hi);
+  margin-left: 3px;
+  vertical-align: middle;
 }
 
 /* Footer note */
@@ -1211,3 +1234,43 @@ input, select, textarea { cursor: text; }
   transition: opacity .15s;
 }
 .btn-primary:hover { opacity: .85; }
+
+/* ── TrueSkill UI ────────────────────────────────────────────────── */
+/* Highlighted live rating value (μ changed from base rating) */
+.ts-live-val {
+  color: var(--green-hi) !important;
+}
+
+/* Certainty label under a rating */
+.ts-cert {
+  font-style: normal;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+  display: block;
+  margin-top: 1px;
+}
+.ts-certain   { color: var(--green-hi); }
+.ts-mid       { color: var(--ochre); }
+.ts-uncertain { color: var(--muted); }
+
+/* sigma label in ProfileModal (small text under TS rating) */
+.ts-sigma-label {
+  font-size: 9px;
+  color: var(--muted);
+  display: block;
+  text-align: center;
+  margin-top: 1px;
+  cursor: help;
+}
+
+/* Player card rating cell — taller to fit certainty label */
+.pc-stat-rating {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+}
+.pc-stat-rating strong { font-size: 18px; font-weight: 900; }
+.pc-stat-rating span   { font-size: 10px; color: var(--muted); }

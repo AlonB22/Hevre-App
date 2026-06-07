@@ -1,13 +1,17 @@
 import { useState } from 'react'
 import { Search } from 'lucide-react'
 import { initials, avatarColor } from '../data'
+import { displayRating, certaintyLabel } from '../trueskill'
 
 const POSITIONS = ['All','GK','CB','RB','LB','CDM','CM','CAM','LW','RW','CF','ST']
 
-export default function Players({ players, onViewPlayer }) {
+export default function Players({ players, tsRatings, onViewPlayer }) {
   const [query,    setQuery]    = useState('')
   const [position, setPosition] = useState('All')
   const [sortBy,   setSortBy]   = useState('rating')
+
+  const getLiveRating = (p) =>
+    tsRatings?.[p.id] ? parseFloat(displayRating(tsRatings[p.id])) : p.rating
 
   const filtered = players
     .filter(p => {
@@ -16,7 +20,7 @@ export default function Players({ players, onViewPlayer }) {
       return true
     })
     .sort((a, b) => {
-      if (sortBy === 'rating')  return b.rating  - a.rating
+      if (sortBy === 'rating')  return getLiveRating(b) - getLiveRating(a)
       if (sortBy === 'goals')   return b.goals   - a.goals
       if (sortBy === 'assists') return b.assists  - a.assists
       return a.name.localeCompare(b.name)
@@ -66,37 +70,52 @@ export default function Players({ players, onViewPlayer }) {
 
       <div className="players-grid">
         {filtered.map(p => (
-          <div key={p.id} className="player-card player-clickable" onClick={() => onViewPlayer?.(p)}>
-            <div className="pc-top">
-              <div className="pc-av" style={{ background: avatarColor(p.id) }}>
-                {initials(p.name)}
-              </div>
-              <div className="pc-info">
-                <strong>{p.name}</strong>
-                <span>{p.neighborhood}</span>
-              </div>
-            </div>
-            <div className="pc-pos">{p.position}</div>
-            <div className="pc-stats">
-              <div>
-                <strong>{p.rating}</strong>
-                <span>Rating</span>
-              </div>
-              <div>
-                <strong>{p.goals}</strong>
-                <span>Goals</span>
-              </div>
-              <div>
-                <strong>{p.assists}</strong>
-                <span>Assists</span>
-              </div>
-              <div>
-                <strong>{p.gamesPlayed}</strong>
-                <span>Games</span>
-              </div>
-            </div>
-          </div>
+          <PlayerCard
+            key={p.id}
+            player={p}
+            tsR={tsRatings?.[p.id]}
+            onClick={() => onViewPlayer?.(p)}
+          />
         ))}
+      </div>
+    </div>
+  )
+}
+
+function PlayerCard({ player: p, tsR, onClick }) {
+  const live    = tsR ? displayRating(tsR) : p.rating.toFixed(1)
+  const changed = tsR && Math.abs(tsR.mu / 5 - p.rating) >= 0.05
+  const { label: certainty, cls: certCls } = tsR ? certaintyLabel(tsR.sigma) : {}
+  return (
+    <div className="player-card player-clickable" onClick={onClick}>
+      <div className="pc-top">
+        <div className="pc-av" style={{ background: avatarColor(p.id) }}>
+          {initials(p.name)}
+        </div>
+        <div className="pc-info">
+          <strong>{p.name}</strong>
+          <span>{p.neighborhood}</span>
+        </div>
+      </div>
+      <div className="pc-pos">{p.position}</div>
+      <div className="pc-stats">
+        <div className="pc-stat-rating">
+          <strong className={changed ? 'ts-live-val' : ''}>{live}</strong>
+          <span>TS Rating</span>
+          {certainty && <em className={`ts-cert ${certCls}`}>{certainty}</em>}
+        </div>
+        <div>
+          <strong>{p.goals}</strong>
+          <span>Goals</span>
+        </div>
+        <div>
+          <strong>{p.assists}</strong>
+          <span>Assists</span>
+        </div>
+        <div>
+          <strong>{p.gamesPlayed}</strong>
+          <span>Games</span>
+        </div>
       </div>
     </div>
   )

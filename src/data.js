@@ -244,14 +244,17 @@ export function fieldIcon(type) {
   return icons[type] ?? '⚽'
 }
 
-// Greedy team balancer — assigns the next highest-rated player to whichever
-// team currently has the lower total rating, producing the fairest split.
-export function autoBalance(players) {
-  const sorted = [...players].sort((a, b) => b.rating - a.rating)
+// Greedy team balancer.
+// When tsRatings are provided it uses each player's live TrueSkill μ (÷5 to
+// stay on the 0-10 scale); otherwise falls back to the static rating field.
+export function autoBalance(players, tsRatings = {}) {
+  const getSkill = (p) =>
+    tsRatings[p.id] ? tsRatings[p.id].mu / 5 : p.rating
+  const sorted = [...players].sort((a, b) => getSkill(b) - getSkill(a))
   const teamA = [], teamB = []
   for (const player of sorted) {
-    const sumA = teamA.reduce((s, p) => s + p.rating, 0)
-    const sumB = teamB.reduce((s, p) => s + p.rating, 0)
+    const sumA = teamA.reduce((s, p) => s + getSkill(p), 0)
+    const sumB = teamB.reduce((s, p) => s + getSkill(p), 0)
     if (sumA <= sumB) teamA.push(player)
     else teamB.push(player)
   }
