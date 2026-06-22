@@ -1,14 +1,14 @@
 import { CalendarDays, ChevronRight, Clock, MapPin, Users } from 'lucide-react'
-import { LOCATIONS, formatDate, initials, avatarColor, spotsLeft } from '../data'
+import { LOCATIONS as FALLBACK_LOCATIONS, formatDate, initials, avatarColor, spotsLeft } from '../data'
 
-export default function Dashboard({ user, games, players, onRsvp, setView, onViewPlayer }) {
+export default function Dashboard({ user, games, players, locations = FALLBACK_LOCATIONS, onRsvp, setView, onViewPlayer }) {
   const upcoming = games
     .filter(g => g.status === 'upcoming')
     .sort((a, b) => a.date.localeCompare(b.date))
 
   const myGames = upcoming.filter(g => g.playerIds.includes(user.id))
   const nextGame = myGames[0] ?? upcoming[0]
-  const nextLoc = nextGame ? LOCATIONS.find(l => l.id === nextGame.locationId) : null
+  const nextLoc = nextGame ? locations.find(l => l.id === nextGame.locationId) : null
   const isInNext = nextGame?.playerIds.includes(user.id)
 
   const topScorers = [...players].sort((a, b) => b.goals - a.goals).slice(0, 5)
@@ -120,7 +120,7 @@ export default function Dashboard({ user, games, players, onRsvp, setView, onVie
           </div>
           <div className="up-list">
             {upcoming.slice(0, 6).map(g => {
-              const loc = LOCATIONS.find(l => l.id === g.locationId)
+              const loc = locations.find(l => l.id === g.locationId)
               const left = spotsLeft(g)
               const isIn = g.playerIds.includes(user.id)
               return (

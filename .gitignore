@@ -1,5 +1,27 @@
 node_modules/
 dist/
+
+# Local environment files
 .env
-.env.local
+.env.*
+!.env.example
+
+# Logs and local runtime artifacts
+*.log
+logs/
+vite-dev*.log
+
+# Local notes and generated exports
+tasks/
+outputs/
+
+# Editor and OS files
+.vscode/
+.idea/
 .DS_Store
+Thumbs.db
+desktop.ini
+
+# Supabase local development runtime
+supabase/.branches/
+supabase/.temp/

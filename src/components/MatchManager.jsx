@@ -1,10 +1,12 @@
 import { EyeOff, RefreshCw, X } from 'lucide-react'
-import { LOCATIONS, formatDate, initials, avatarColor } from '../data'
+import { LOCATIONS as FALLBACK_LOCATIONS, formatDate, initials, avatarColor } from '../data'
 import { matchQuality, qualityGrade, displayRating } from '../trueskill'
+import { canManageGame } from '../roles'
 
 export default function MatchManager({
   game,
   players,
+  locations = FALLBACK_LOCATIONS,
   user,
   assignments,   // { teamA: [ids], teamB: [ids] }
   published,     // boolean
@@ -15,9 +17,9 @@ export default function MatchManager({
   onTogglePublish,
   onClose,
 }) {
-  const isAdmin   = user.id === game.organizerId
+  const isAdmin   = canManageGame(user, game)
   const organizer = players.find(p => p.id === game.organizerId)
-  const loc     = LOCATIONS.find(l => l.id === game.locationId)
+  const loc     = locations.find(l => l.id === game.locationId)
 
   const gamePlayers  = game.playerIds.map(id => players.find(p => p.id === id)).filter(Boolean)
   const teamAPlayers = (assignments?.teamA ?? []).map(id => players.find(p => p.id === id)).filter(Boolean)

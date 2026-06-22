@@ -56,7 +56,7 @@ export function positionAwareBalance(players) {
  *  When you're ready to connect to OpenAI:
  *
  *  1. Install: npm install openai
- *  2. Add to your .env:  VITE_OPENAI_KEY=sk-...
+ *  2. Add your OpenAI API key to .env as VITE_OPENAI_KEY
  *  3. Swap the autoBalance() call in App.jsx with suggestTeamsWithAI()
  *
  *  The AI can use:

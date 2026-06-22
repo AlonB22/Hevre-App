@@ -1,6 +1,6 @@
-import { LOCATIONS, formatDate, initials, avatarColor } from '../data'
+import { LOCATIONS as FALLBACK_LOCATIONS, formatDate, initials, avatarColor } from '../data'
 
-export default function MyStats({ user, games, players, ratings, onOpenModal, onViewPlayer }) {
+export default function MyStats({ user, games, players, locations = FALLBACK_LOCATIONS, ratings, onOpenModal, onViewPlayer }) {
   const myPast = games
     .filter(g => g.status === 'past' && g.playerIds.includes(user.id))
     .sort((a, b) => b.date.localeCompare(a.date))
@@ -76,7 +76,7 @@ export default function MyStats({ user, games, players, ratings, onOpenModal, on
           <div className="sec-title">Game by Game</div>
           <div className="mystats-list">
             {myPast.map(g => {
-              const loc         = LOCATIONS.find(l => l.id === g.locationId)
+              const loc         = locations.find(l => l.id === g.locationId)
               const myStats     = g.playerStats?.[user.id] ?? {}
               const gameRatings = ratings[g.id]?.[user.id] ?? {}
               const ratingVals  = Object.values(gameRatings)
