@@ -31,6 +31,28 @@ export const PLAYERS = [
   { id: 28, name: 'Aviv Barel',      username: 'aviv_b',   email: 'aviv@hevre.app',   position: 'GK',  rating: 7.5, goals: 0,  assists: 1,  cleanSheets: 10, gamesPlayed: 22, neighborhood: 'Tel Aviv',         paid: true  },
   { id: 29, name: 'Yuval Dahan',     username: 'yuval_d',  email: 'yuval@hevre.app',  position: 'CM',  rating: 7.9, goals: 8,  assists: 14, cleanSheets: 0,  gamesPlayed: 26, neighborhood: 'Rishon LeZion',    paid: true,  bio: "Box-to-box midfielder. I run the most every game and I'm proud of it. Fitness is half the game." },
   { id: 30, name: 'Or Nachmani',     username: 'or_n',     email: 'or@hevre.app',     position: 'ST',  rating: 8.3, goals: 27, assists: 9,  cleanSheets: 0,  gamesPlayed: 29, neighborhood: 'Ramat Gan',        paid: true,  bio: "Born winner. Every ball is a chance, every chance is a goal. Ramat Gan in the blood." },
+
+  // ── New players (IDs 31–45) — TrueSkill-calibrated from first game ──────────
+  // Veterans (many games → low σ, rating is well-established)
+  { id: 31, name: 'Gal Hadari',      username: 'gal_h',    email: 'gal@hevre.app',    position: 'CM',  rating: 8.1, goals: 10, assists: 15, cleanSheets: 0,  gamesPlayed: 27, neighborhood: 'Herzliya',         paid: true,  bio: "Engine of the midfield. I cover every blade of grass so the attackers can do their thing. Unsung hero? Fine by me." },
+  { id: 32, name: 'Doron Avraham',   username: 'doron_a',  email: 'doron@hevre.app',  position: 'ST',  rating: 8.2, goals: 26, assists: 6,  cleanSheets: 0,  gamesPlayed: 25, neighborhood: 'Givatayim',        paid: true,  bio: "Poacher. I don't need a long run-up. Just give me a yard in the box." },
+  { id: 33, name: 'Yaniv Cohen',     username: 'yaniv_c',  email: 'yaniv@hevre.app',  position: 'LW',  rating: 8.0, goals: 12, assists: 13, cleanSheets: 0,  gamesPlayed: 24, neighborhood: 'Holon',            paid: false },
+  { id: 34, name: 'Yoav Perelman',   username: 'yoav_p',   email: 'yoav@hevre.app',   position: 'CB',  rating: 7.9, goals: 2,  assists: 4,  cleanSheets: 0,  gamesPlayed: 23, neighborhood: 'Tel Aviv',         paid: true,  bio: "Old school centre-back. No tricks, no dribbling. Just win the ball and give it simple." },
+  { id: 35, name: 'Omer Ben-Zion',   username: 'omer_bz',  email: 'omerbz@hevre.app', position: 'CF',  rating: 8.3, goals: 23, assists: 10, cleanSheets: 0,  gamesPlayed: 26, neighborhood: 'Ramat Gan',        paid: true  },
+  { id: 36, name: 'Tamir Shahar',    username: 'tamir_s',  email: 'tamir@hevre.app',  position: 'CM',  rating: 7.8, goals: 7,  assists: 11, cleanSheets: 0,  gamesPlayed: 22, neighborhood: 'Tel Aviv',         paid: true  },
+  { id: 37, name: 'Natan Ben-Simon', username: 'natan_bs', email: 'natan@hevre.app',  position: 'GK',  rating: 7.7, goals: 0,  assists: 2,  cleanSheets: 11, gamesPlayed: 20, neighborhood: 'Ramat Gan',        paid: false, bio: "Goalkeeper first, everything else second. My distribution has won more games than my saves." },
+  { id: 38, name: 'Ohad Bar-Lev',    username: 'ohad_bl',  email: 'ohad@hevre.app',   position: 'RB',  rating: 7.6, goals: 3,  assists: 8,  cleanSheets: 0,  gamesPlayed: 21, neighborhood: 'Rishon LeZion',    paid: true  },
+  { id: 39, name: 'Sagi Hazan',      username: 'sagi_h',   email: 'sagi@hevre.app',   position: 'CDM', rating: 7.5, goals: 2,  assists: 6,  cleanSheets: 0,  gamesPlayed: 18, neighborhood: 'Petah Tikva',      paid: true  },
+
+  // Mid-range players (moderate games → medium σ)
+  { id: 40, name: 'Rami Abutbul',    username: 'rami_a',   email: 'rami@hevre.app',   position: 'ST',  rating: 7.8, goals: 14, assists: 5,  cleanSheets: 0,  gamesPlayed: 17, neighborhood: 'Ashdod',           paid: false, bio: "Came up from Ashdod — people sleep on us. Wait till you see me one-on-one with a keeper." },
+  { id: 41, name: 'Kobi Dayan',      username: 'kobi_d',   email: 'kobi@hevre.app',   position: 'LB',  rating: 7.6, goals: 1,  assists: 7,  cleanSheets: 0,  gamesPlayed: 15, neighborhood: 'Netanya',          paid: true  },
+  { id: 42, name: 'Adir Ohayon',     username: 'adir_o',   email: 'adir@hevre.app',   position: 'CB',  rating: 7.3, goals: 1,  assists: 2,  cleanSheets: 0,  gamesPlayed: 14, neighborhood: 'Bnei Brak',        paid: true  },
+  { id: 43, name: 'Ido Shalom',      username: 'ido_s',    email: 'ido@hevre.app',    position: 'ST',  rating: 7.9, goals: 11, assists: 4,  cleanSheets: 0,  gamesPlayed: 13, neighborhood: 'Tel Aviv',         paid: false },
+
+  // Newcomers (few games → high σ, TrueSkill will calibrate them fast)
+  { id: 44, name: 'Eitan Mizrahi',   username: 'eitan_m',  email: 'eitan@hevre.app',  position: 'RW',  rating: 7.4, goals: 4,  assists: 3,  cleanSheets: 0,  gamesPlayed: 8,  neighborhood: 'Bat Yam',          paid: false, bio: "Just moved from Haifa. Used to play semi-pro up north. Looking to prove myself in the Tel Aviv scene." },
+  { id: 45, name: 'Liron Nachman',   username: 'liron_n',  email: 'liron@hevre.app',  position: 'CAM', rating: 7.3, goals: 3,  assists: 5,  cleanSheets: 0,  gamesPlayed: 6,  neighborhood: 'Tel Aviv',         paid: true,  bio: "New to the group but not to the game. Technical player — I prefer to keep the ball on the ground." },
 ]
 
 export const LOCATIONS = [
@@ -121,75 +143,75 @@ export const GAMES = [
   },
   {
     id: 4, locationId: 9, title: 'Herzliya Sunday 6v6', date: '2026-05-24', time: '19:00',
-    format: '6v6', spotsTotal: 12, playerIds: [22,23,24,25,26],
+    format: '6v6', spotsTotal: 12, playerIds: [22,23,24,25,26,31,36],
     pricePerPlayer: 40, organizerId: 22, status: 'upcoming',
-    paidIds: [22,23,24],
+    paidIds: [22,23,24,31],
   },
   {
     id: 5, locationId: 5, title: 'Petah Tikva Weeknight 7v7', date: '2026-05-26', time: '21:00',
-    format: '7v7', spotsTotal: 14, playerIds: [6,9,15,24,25,29],
+    format: '7v7', spotsTotal: 14, playerIds: [6,9,15,24,25,29,39,42],
     pricePerPlayer: 45, organizerId: 6, status: 'upcoming',
-    paidIds: [6,9,15],
+    paidIds: [6,9,15,39],
   },
   {
     id: 6, locationId: 11, title: 'Jaffa Port Evening 6v6', date: '2026-05-28', time: '20:00',
-    format: '6v6', spotsTotal: 12, playerIds: [11,12,13,16,17,25,26,27],
+    format: '6v6', spotsTotal: 12, playerIds: [11,12,13,16,17,25,26,27,33,38],
     pricePerPlayer: 40, organizerId: 12, status: 'upcoming',
-    paidIds: [11,12,16,17],
+    paidIds: [11,12,16,17,33],
   },
   {
     id: 7, locationId: 10, title: 'Florentin Indoor 5v5', date: '2026-05-30', time: '19:30',
-    format: '5v5', spotsTotal: 10, playerIds: [14,20,22,29],
+    format: '5v5', spotsTotal: 10, playerIds: [14,20,22,29,45,44],
     pricePerPlayer: 40, organizerId: 14, status: 'upcoming',
-    paidIds: [14,20],
+    paidIds: [14,20,45],
   },
   {
     id: 8, locationId: 7, title: 'Bat Yam Beach Kickabout', date: '2026-06-02', time: '18:00',
-    format: '6v6', spotsTotal: 12, playerIds: [3,8,23,30],
+    format: '6v6', spotsTotal: 12, playerIds: [3,8,23,30,40,44],
     pricePerPlayer: 30, organizerId: 3, status: 'upcoming',
-    paidIds: [3,8],
+    paidIds: [3,8,40],
   },
   {
     id: 9, locationId: 1, title: 'Sportek Friday 8v8', date: '2026-06-05', time: '21:30',
-    format: '8v8', spotsTotal: 16, playerIds: [1,2,3,4],
+    format: '8v8', spotsTotal: 16, playerIds: [1,2,3,4,31,32,34,36],
     pricePerPlayer: 55, organizerId: 1, status: 'upcoming',
-    paidIds: [1],
+    paidIds: [1,31,32],
   },
   {
     id: 10, locationId: 8, title: 'Rishon Classic 7v7', date: '2026-06-09', time: '21:00',
-    format: '7v7', spotsTotal: 14, playerIds: [19,29],
+    format: '7v7', spotsTotal: 14, playerIds: [19,29,38,41,43],
     pricePerPlayer: 45, organizerId: 19, status: 'upcoming',
-    paidIds: [19],
+    paidIds: [19,38],
   },
   {
     id: 11, locationId: 13, title: 'North TA Super 8v8', date: '2026-06-12', time: '20:00',
-    format: '8v8', spotsTotal: 16, playerIds: [1,2,3,4,5,6,7,8],
+    format: '8v8', spotsTotal: 16, playerIds: [1,2,3,4,5,6,7,8,31,32,33,34,35,36],
     pricePerPlayer: 50, organizerId: 2, status: 'upcoming',
-    paidIds: [1,2,3,4,5,6,7,8],
+    paidIds: [1,2,3,4,5,6,7,8,31,32],
   },
   {
     id: 12, locationId: 15, title: 'Netanya Beach Trip', date: '2026-06-16', time: '17:00',
-    format: '5v5', spotsTotal: 10, playerIds: [1,3,8,23,30],
+    format: '5v5', spotsTotal: 10, playerIds: [1,3,8,23,30,41],
     pricePerPlayer: 25, organizerId: 1, status: 'upcoming',
-    paidIds: [1,3],
+    paidIds: [1,3,41],
   },
   {
     id: 13, locationId: 12, title: 'Bnei Brak Community 7v7', date: '2026-06-19', time: '21:00',
-    format: '7v7', spotsTotal: 14, playerIds: [9,15],
+    format: '7v7', spotsTotal: 14, playerIds: [9,15,39,42,37,43],
     pricePerPlayer: 40, organizerId: 9, status: 'upcoming',
-    paidIds: [],
+    paidIds: [9,39],
   },
   {
     id: 14, locationId: 6, title: 'Holon Night 6v6', date: '2026-06-23', time: '21:30',
-    format: '6v6', spotsTotal: 12, playerIds: [12,13,19],
+    format: '6v6', spotsTotal: 12, playerIds: [12,13,19,33,40,43],
     pricePerPlayer: 40, organizerId: 12, status: 'upcoming',
-    paidIds: [12],
+    paidIds: [12,33],
   },
   {
     id: 15, locationId: 14, title: 'Ramat HaSharon Sunday', date: '2026-06-26', time: '10:00',
-    format: '7v7', spotsTotal: 14, playerIds: [16,22,25,28,29,30],
+    format: '7v7', spotsTotal: 14, playerIds: [16,22,25,28,29,30,35,37,45],
     pricePerPlayer: 45, organizerId: 16, status: 'upcoming',
-    paidIds: [16,22,25],
+    paidIds: [16,22,25,35],
   },
 ]
 
@@ -244,14 +266,17 @@ export function fieldIcon(type) {
   return icons[type] ?? '⚽'
 }
 
-// Greedy team balancer — assigns the next highest-rated player to whichever
-// team currently has the lower total rating, producing the fairest split.
-export function autoBalance(players) {
-  const sorted = [...players].sort((a, b) => b.rating - a.rating)
+// Greedy team balancer.
+// When tsRatings are provided it uses each player's live TrueSkill μ (÷5 to
+// stay on the 0-10 scale); otherwise falls back to the static rating field.
+export function autoBalance(players, tsRatings = {}) {
+  const getSkill = (p) =>
+    tsRatings[p.id] ? tsRatings[p.id].mu / 5 : p.rating
+  const sorted = [...players].sort((a, b) => getSkill(b) - getSkill(a))
   const teamA = [], teamB = []
   for (const player of sorted) {
-    const sumA = teamA.reduce((s, p) => s + p.rating, 0)
-    const sumB = teamB.reduce((s, p) => s + p.rating, 0)
+    const sumA = teamA.reduce((s, p) => s + getSkill(p), 0)
+    const sumB = teamB.reduce((s, p) => s + getSkill(p), 0)
     if (sumA <= sumB) teamA.push(player)
     else teamB.push(player)
   }

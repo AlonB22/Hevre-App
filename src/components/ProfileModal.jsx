@@ -1,12 +1,14 @@
 import { useRef, useState } from 'react'
 import { Camera, X } from 'lucide-react'
 import { initials, avatarColor } from '../data'
+import { displayRating, conservativeScore, certaintyLabel } from '../trueskill'
 
 export default function ProfileModal({
   player,
   isOwn,
-  bio,      // override bio from app state (own profile edits)
-  pic,      // uploaded profile pic (base64)
+  bio,       // override bio from app state (own profile edits)
+  pic,       // uploaded profile pic (base64)
+  tsRating,  // live TrueSkill Rating object for this player
   onSaveBio,
   onSavePic,
   onClose,
@@ -89,8 +91,20 @@ export default function ProfileModal({
         {/* Stats row */}
         <div className="profile-stats-row">
           <div className="profile-stat">
-            <strong>{player.rating}</strong>
-            <span>Rating</span>
+            {tsRating ? (
+              <>
+                <strong className="ts-live-val">{displayRating(tsRating)}</strong>
+                <span>TS Rating</span>
+                <small className="ts-sigma-label" title={`σ=${tsRating.sigma.toFixed(2)} — ${certaintyLabel(tsRating.sigma).label}`}>
+                  {certaintyLabel(tsRating.sigma).label}
+                </small>
+              </>
+            ) : (
+              <>
+                <strong>{player.rating}</strong>
+                <span>Rating</span>
+              </>
+            )}
           </div>
           <div className="profile-stat">
             <strong>{player.goals}</strong>
@@ -108,6 +122,12 @@ export default function ProfileModal({
             <div className="profile-stat">
               <strong>{player.cleanSheets}</strong>
               <span>Clean Sheets</span>
+            </div>
+          )}
+          {tsRating && (
+            <div className="profile-stat" title="Conservative TrueSkill score: minimum expected skill (μ − σ)">
+              <strong>{conservativeScore(tsRating)}</strong>
+              <span>Floor</span>
             </div>
           )}
         </div>
