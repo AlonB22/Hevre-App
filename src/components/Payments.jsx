@@ -1,6 +1,7 @@
-import { LOCATIONS, formatDate, initials, avatarColor } from '../data'
+import { LOCATIONS as FALLBACK_LOCATIONS, formatDate, initials, avatarColor } from '../data'
+import { canManageGame, isOrganizer } from '../roles'
 
-export default function Payments({ user, games, players }) {
+export default function Payments({ user, games, players, locations = FALLBACK_LOCATIONS }) {
   const allMyGames = games.filter(g => g.playerIds.includes(user.id))
 
   // What I owe (upcoming + unpaid)
@@ -11,7 +12,7 @@ export default function Payments({ user, games, players }) {
 
   // Games I organise where others haven't paid
   const myOrganised = games.filter(
-    g => g.organizerId === user.id && g.status === 'upcoming'
+    g => isOrganizer(user) && canManageGame(user, g) && g.status === 'upcoming'
   )
   const toCollect = myOrganised
     .map(g => ({
@@ -56,7 +57,7 @@ export default function Payments({ user, games, players }) {
             : (
               <div className="pay-list">
                 {iOwe.map(g => {
-                  const loc = LOCATIONS.find(l => l.id === g.locationId)
+                  const loc = locations.find(l => l.id === g.locationId)
                   return (
                     <div key={g.id} className="pay-row">
                       <div>
@@ -137,7 +138,7 @@ export default function Payments({ user, games, players }) {
           ) : (
             <div className="pay-list">
               {history.map(g => {
-                const loc = LOCATIONS.find(l => l.id === g.locationId)
+                const loc = locations.find(l => l.id === g.locationId)
                 return (
                   <div key={g.id} className="pay-row">
                     <div>

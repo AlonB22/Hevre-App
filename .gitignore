@@ -1,5 +1,39 @@
 node_modules/
 dist/
+build/
+coverage/
+
+# Local environment files
 .env
-.env.local
+.env.*
+!.env.example
+
+# Logs and local runtime artifacts
+*.log
+logs/
+vite-dev*.log
+*.tsbuildinfo
+.vite/
+
+# Local notes and generated exports
+tasks/
+outputs/
+
+# Editor and OS files
+.vscode/
+.idea/
 .DS_Store
+Thumbs.db
+desktop.ini
+
+# Supabase local development runtime
+supabase/.branches/
+supabase/.temp/
+
+# Test and browser automation artifacts
+playwright-report/
+test-results/
+
+# Package manager caches
+.npm/
+.pnpm-store/

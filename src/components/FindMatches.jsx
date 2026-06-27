@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import L from 'leaflet'
 import { CalendarDays, Clock, MapPin, Users } from 'lucide-react'
-import { LOCATIONS, formatDate, spotsLeft, fieldIcon } from '../data'
+import { LOCATIONS as FALLBACK_LOCATIONS, formatDate, spotsLeft, fieldIcon } from '../data'
 
-export default function FindMatches({ user, games, onRsvp }) {
+export default function FindMatches({ user, games, locations = FALLBACK_LOCATIONS, onRsvp }) {
   const containerRef  = useRef(null)
   const mapRef        = useRef(null)
   const markersRef    = useRef({})
@@ -18,7 +18,7 @@ export default function FindMatches({ user, games, onRsvp }) {
     .sort((a, b) => a.date.localeCompare(b.date))
 
   const filtered = upcoming.filter(g => {
-    const loc = LOCATIONS.find(l => l.id === g.locationId)
+    const loc = locations.find(l => l.id === g.locationId)
     if (fmtFilter !== 'all'   && g.format     !== fmtFilter)   return false
     if (fieldFilter !== 'all' && loc?.type    !== fieldFilter)  return false
     if (onlyOpen              && spotsLeft(g) === 0)            return false
@@ -50,16 +50,17 @@ export default function FindMatches({ user, games, onRsvp }) {
     markersRef.current = {}
 
     filtered.forEach(game => {
-      const loc = LOCATIONS.find(l => l.id === game.locationId)
+      const loc = locations.find(l => l.id === game.locationId)
       if (!loc) return
       const isSel  = selected?.id === game.id
       const isUser = game.playerIds.includes(user.id)
       const left   = spotsLeft(game)
+      const safeFormat = escapeHtml(game.format)
 
       const icon = L.divIcon({
         className: '',
         html: `<div class="map-pin${isSel ? ' pin-sel' : ''}${isUser ? ' pin-user' : ''}">
-          ${game.format}
+          ${safeFormat}
           ${left > 0 ? `<span class="pin-spots">${left}</span>` : ''}
         </div>`,
         iconSize:   [76, 30],
@@ -77,7 +78,7 @@ export default function FindMatches({ user, games, onRsvp }) {
   // Fly to selected game
   useEffect(() => {
     if (!mapRef.current || !selected) return
-    const loc = LOCATIONS.find(l => l.id === selected.locationId)
+    const loc = locations.find(l => l.id === selected.locationId)
     if (loc) mapRef.current.flyTo([loc.lat, loc.lng], 14, { duration: 0.7 })
   }, [selected])
 
@@ -140,7 +141,7 @@ export default function FindMatches({ user, games, onRsvp }) {
             ? [selected, ...filtered.filter(g => g.id !== selected.id)]
             : filtered
           ).map(game => {
-            const loc  = LOCATIONS.find(l => l.id === game.locationId)
+            const loc  = locations.find(l => l.id === game.locationId)
             const isIn = game.playerIds.includes(user.id)
             const left = spotsLeft(game)
             const isSel = selected?.id === game.id
@@ -193,4 +194,13 @@ export default function FindMatches({ user, games, onRsvp }) {
       </div>
     </div>
   )
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;')
 }

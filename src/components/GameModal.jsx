@@ -1,8 +1,8 @@
 import { X } from 'lucide-react'
-import { LOCATIONS, formatDate, initials, avatarColor } from '../data'
+import { LOCATIONS as FALLBACK_LOCATIONS, formatDate, initials, avatarColor } from '../data'
 
-export default function GameModal({ game, players, user, ratings, onRate, onClose, onViewPlayer, feedback, onSaveFeedback }) {
-  const loc = LOCATIONS.find(l => l.id === game.locationId)
+export default function GameModal({ game, players, locations = FALLBACK_LOCATIONS, user, ratings, onRate, onClose, onViewPlayer, feedback, onSaveFeedback }) {
+  const loc = locations.find(l => l.id === game.locationId)
   const gameRatings = ratings[game.id] ?? {}
 
   const teamAPlayers = (game.teamA ?? []).map(id => players.find(p => p.id === id)).filter(Boolean)

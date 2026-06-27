@@ -27,15 +27,22 @@
  *   We show this as a "Match Quality %" in the MatchManager.
  */
 
-import { TrueSkill, Rating } from 'ts-trueskill'
+export class Rating {
+  constructor(mu = 35, sigma = 6) {
+    this.mu = mu
+    this.sigma = sigma
+  }
+}
 
-// ── Environment ────────────────────────────────────────────────────────────
-// mu=35 (midpoint of our 7–9 range × 5), sigma=6 (tighter than default 8.33
-// because our player base is more homogeneous — all regular, semi-serious players).
-// beta=3 (half of sigma) controls how much a single game changes ratings.
-// tau=0.3 keeps ratings from freezing over time (dynamic factor).
-// drawProbability=0.15 (15% of soccer games end in a draw — realistic for 5-a-side).
-export const env = new TrueSkill(35, 6, 3, 0.3, 0.15)
+// Local rating environment. This intentionally avoids the retired
+// `ts-trueskill` package, whose available versions currently pull vulnerable
+// transitive dependencies. The app needs deterministic team balancing and demo
+// rating movement, not a server-authoritative skill engine.
+export const env = {
+  createRating(mu = 35, sigma = 6) {
+    return new Rating(mu, sigma)
+  },
+}
 
 // ── Initialise a player's TrueSkill rating from their static data.js rating ─
 // Sigma formula: 6 − (gamesPlayed × 0.2), floored at 1.2.
@@ -83,12 +90,17 @@ export function processGameResult(tsRatings, teamAIds, teamBIds, winner) {
 
   const teamA = teamAIds.map(ratingOf)
   const teamB = teamBIds.map(ratingOf)
+  const avgA = average(teamA.map(rating => rating.mu))
+  const avgB = average(teamB.map(rating => rating.mu))
+  const upsetFactor = Math.max(0.65, Math.min(1.35, 1 + Math.abs(avgA - avgB) / 60))
+  const baseDelta = winner === 'draw' ? 0.4 : 1.2
+  const deltaA = winner === 'A' ? baseDelta * (avgA < avgB ? upsetFactor : 1 / upsetFactor)
+               : winner === 'B' ? -baseDelta * (avgB < avgA ? upsetFactor : 1 / upsetFactor)
+               : avgA > avgB ? -baseDelta : baseDelta
+  const deltaB = winner === 'draw' ? -deltaA : -deltaA
 
-  const ranks = winner === 'A' ? [0, 1]
-              : winner === 'B' ? [1, 0]
-              :                  [0, 0]  // draw
-
-  const [newA, newB] = env.rate([teamA, teamB], ranks)
+  const newA = teamA.map(rating => shiftRating(rating, deltaA))
+  const newB = teamB.map(rating => shiftRating(rating, deltaB))
 
   const updated = { ...tsRatings }
   teamAIds.forEach((id, i) => { updated[id] = newA[i] })
@@ -121,7 +133,11 @@ export function matchQuality(teamAPlayers, teamBPlayers, tsRatings) {
   const rOf = (p) => tsRatings[p.id] ?? env.createRating()
   const teamA = teamAPlayers.map(rOf)
   const teamB = teamBPlayers.map(rOf)
-  return Math.round(env.quality([teamA, teamB]) * 100)
+  const avgA = average(teamA.map(rating => rating.mu))
+  const avgB = average(teamB.map(rating => rating.mu))
+  const uncertainty = average([...teamA, ...teamB].map(rating => rating.sigma))
+  const score = 100 * Math.exp(-Math.abs(avgA - avgB) / Math.max(6, uncertainty * 2))
+  return Math.max(0, Math.min(100, Math.round(score)))
 }
 
 // ── TrueSkill-aware team balancer ─────────────────────────────────────────────
@@ -148,4 +164,13 @@ export function qualityGrade(pct) {
   if (pct >= 60) return { label: `${pct}% · Well balanced`,   cls: 'bal-ok'    }
   if (pct >= 40) return { label: `${pct}% · Slightly uneven`, cls: 'bal-warn'  }
   return               { label: `${pct}% · Needs rebalance`,  cls: 'bal-bad'   }
+}
+
+function shiftRating(rating, delta) {
+  return new Rating(rating.mu + delta, Math.max(1.2, rating.sigma * 0.96))
+}
+
+function average(values) {
+  if (values.length === 0) return 0
+  return values.reduce((sum, value) => sum + value, 0) / values.length
 }

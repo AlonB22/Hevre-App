@@ -3,6 +3,9 @@
  * ─────────────────────────────────────────────────────────────────────────
  * Fill in your project credentials from the Firebase Console
  * (Project Settings → General → Your apps → Firebase SDK snippet → Config)
+ * These web config values are public project identifiers, not secrets. They
+ * are safe in the browser only when Firebase Auth and strict Firestore/Storage
+ * rules enforce every read/write. See SECURITY.md before enabling Firebase.
  *
  * When ready to go live:
  *  1. Replace the placeholder values below with your real config

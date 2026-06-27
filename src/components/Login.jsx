@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { ChevronRight, Zap } from 'lucide-react'
-import { PLAYERS, PASSWORD, initials, avatarColor } from '../data'
+import { DEMO_PASSWORD, isDemoPasswordConfigured, initials, avatarColor } from '../data'
 
 const QUICK = [
   { id: 1,  sub: 'CAM · Ramat Gan' },
@@ -15,14 +15,15 @@ export default function Login({ players, onLogin }) {
 
   const prefill = (playerId) => {
     const p = players.find(x => x.id === playerId)
-    if (p) { setEmail(p.email); setPassword(PASSWORD); setError('') }
+    if (p) { setEmail(p.email); setPassword(DEMO_PASSWORD); setError('') }
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
     const p = players.find(x => x.email === email.trim().toLowerCase())
     if (!p)              { setError('No account found with that email.'); return }
-    if (password !== PASSWORD) { setError('Wrong password — use: footy123'); return }
+    if (!isDemoPasswordConfigured) { setError('Demo password is not configured. Set VITE_DEMO_PASSWORD.'); return }
+    if (password !== DEMO_PASSWORD) { setError('Wrong password.'); return }
     onLogin(p)
   }
 
@@ -36,7 +37,7 @@ export default function Login({ players, onLogin }) {
           <p>Your neighborhood soccer community, upgraded.</p>
         </div>
         <div className="login-metrics">
-          <div><strong>30</strong><span>Players</span></div>
+          <div><strong>45</strong><span>Players</span></div>
           <div><strong>15+</strong><span>Games</span></div>
           <div><strong>5</strong><span>Cities</span></div>
         </div>
@@ -75,7 +76,7 @@ export default function Login({ players, onLogin }) {
               <input
                 type="email"
                 value={email}
-                placeholder="alon@hevre.app"
+                placeholder="alon@footy.app"
                 required
                 onChange={e => { setEmail(e.target.value); setError('') }}
               />
@@ -85,7 +86,7 @@ export default function Login({ players, onLogin }) {
               <input
                 type="password"
                 value={password}
-                placeholder="hevre123"
+                placeholder="Demo password"
                 required
                 onChange={e => { setPassword(e.target.value); setError('') }}
               />
@@ -97,7 +98,7 @@ export default function Login({ players, onLogin }) {
           </form>
 
           <p className="login-hint">
-            All 30 accounts use password: <code>footy123</code>
+            Demo credentials are loaded from local environment configuration.
           </p>
         </div>
       </div>

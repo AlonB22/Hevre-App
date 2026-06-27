@@ -1,12 +1,19 @@
 import { describe, it, expect } from 'vitest'
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
 import {
-  PLAYERS, GAMES, LOCATIONS, INITIAL_RATINGS, PASSWORD,
+  PLAYERS, GAMES, LOCATIONS, INITIAL_RATINGS, DEMO_PASSWORD, isDemoPasswordConfigured,
   avatarColor, initials, formatDate, spotsLeft, fieldIcon,
 } from '../data'
 import {
   initialRating, displayRating, conservativeScore,
   certaintyLabel, matchQuality, autoBalanceTS, buildInitialRatings,
 } from '../trueskill'
+import {
+  ROLES, canManageFields, canManageGame, isMunicipalityAdmin, isOrganizer, roleLabel,
+} from '../roles'
+
+const packageJson = JSON.parse(readFileSync(join(process.cwd(), 'package.json'), 'utf8'))
 
 // ─── Utility functions ───────────────────────────────────────────────
 
@@ -86,9 +93,16 @@ describe('fieldIcon()', () => {
 
 // ─── Data integrity ──────────────────────────────────────────────────
 
-describe('PASSWORD', () => {
-  it('is set to footy123', () => {
-    expect(PASSWORD).toBe('footy123')
+describe('demo password', () => {
+  it('is loaded from Vite environment, not a source literal', () => {
+    expect(DEMO_PASSWORD).toBe('test-demo-password')
+    expect(isDemoPasswordConfigured).toBe(true)
+  })
+})
+
+describe('Footy branding', () => {
+  it('uses Footy package identity', () => {
+    expect(packageJson.name).toBe('footy')
   })
 })
 
@@ -127,6 +141,42 @@ describe('PLAYERS array', () => {
   it('no duplicate emails', () => {
     const emails = PLAYERS.map(p => p.email)
     expect(new Set(emails).size).toBe(45)
+  })
+  it('uses the Footy demo email domain for every player', () => {
+    for (const player of PLAYERS) {
+      expect(player.email).toMatch(/@footy\.app$/)
+    }
+  })
+  it('all organizerIds point to organizer-capable users', () => {
+    for (const game of GAMES) {
+      const organizer = PLAYERS.find(p => p.id === game.organizerId)
+      expect(isOrganizer(organizer), `game ${game.id} organizer lacks role`).toBe(true)
+    }
+  })
+})
+
+describe('roles', () => {
+  const player = PLAYERS.find(p => !p.role)
+  const organizer = PLAYERS.find(p => p.role === ROLES.ORGANIZER)
+  const municipalityAdmin = PLAYERS.find(p => p.role === ROLES.MUNICIPALITY_ADMIN)
+  const organizerGame = GAMES.find(g => g.organizerId === organizer.id)
+  const otherGame = GAMES.find(g => g.organizerId !== organizer.id)
+
+  it('defaults users without role metadata to player', () => {
+    expect(roleLabel(player.role)).toBe('Player')
+    expect(isOrganizer(player)).toBe(false)
+    expect(canManageFields(player)).toBe(false)
+  })
+
+  it('lets organizers manage only their own games', () => {
+    expect(canManageGame(organizer, organizerGame)).toBe(true)
+    expect(canManageGame(organizer, otherGame)).toBe(false)
+  })
+
+  it('lets municipality/admin users manage fields and any game', () => {
+    expect(isMunicipalityAdmin(municipalityAdmin)).toBe(true)
+    expect(canManageFields(municipalityAdmin)).toBe(true)
+    expect(canManageGame(municipalityAdmin, otherGame)).toBe(true)
   })
 })
 

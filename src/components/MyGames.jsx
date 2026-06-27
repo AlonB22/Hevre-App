@@ -1,7 +1,8 @@
 import { CalendarDays, Clock, MapPin, Users } from 'lucide-react'
-import { LOCATIONS, formatDate, spotsLeft } from '../data'
+import { LOCATIONS as FALLBACK_LOCATIONS, formatDate, spotsLeft } from '../data'
+import { canManageGame } from '../roles'
 
-export default function MyGames({ user, games, onRsvp, setView, onOpenModal, onOpenManager, publishedGames }) {
+export default function MyGames({ user, games, locations = FALLBACK_LOCATIONS, onRsvp, setView, onOpenModal, onOpenManager, publishedGames }) {
   const myUpcoming = games
     .filter(g => g.status === 'upcoming' && g.playerIds.includes(user.id))
     .sort((a, b) => a.date.localeCompare(b.date))
@@ -41,6 +42,7 @@ export default function MyGames({ user, games, onRsvp, setView, onOpenModal, onO
                 game={g}
                 user={user}
                 onRsvp={onRsvp}
+                locations={locations}
                 onManage={() => onOpenManager(g)}
                 isPublished={publishedGames?.has(g.id)}
               />
@@ -54,7 +56,7 @@ export default function MyGames({ user, games, onRsvp, setView, onOpenModal, onO
           <div className="sec-title">Match History ({myPast.length}) — click any game to view stats &amp; rate</div>
           <div className="gc-grid">
             {myPast.map(g => (
-              <PastCard key={g.id} game={g} user={user} onClick={() => onOpenModal(g)} />
+              <PastCard key={g.id} game={g} user={user} locations={locations} onClick={() => onOpenModal(g)} />
             ))}
           </div>
         </section>
@@ -63,12 +65,12 @@ export default function MyGames({ user, games, onRsvp, setView, onOpenModal, onO
   )
 }
 
-function GameCard({ game, user, onRsvp, onManage, isPublished }) {
-  const loc      = LOCATIONS.find(l => l.id === game.locationId)
+function GameCard({ game, user, locations, onRsvp, onManage, isPublished }) {
+  const loc      = locations.find(l => l.id === game.locationId)
   const left     = spotsLeft(game)
   const paid     = game.paidIds?.includes(user.id)
   const pct      = Math.round((game.playerIds.length / game.spotsTotal) * 100)
-  const isOrg    = user.id === game.organizerId
+  const isOrg    = canManageGame(user, game)
 
   return (
     <div className="game-card no-hover">
@@ -116,8 +118,8 @@ function GameCard({ game, user, onRsvp, onManage, isPublished }) {
   )
 }
 
-function PastCard({ game, user, onClick }) {
-  const loc    = LOCATIONS.find(l => l.id === game.locationId)
+function PastCard({ game, user, locations, onClick }) {
+  const loc    = locations.find(l => l.id === game.locationId)
   const result = game.scoreA !== undefined
     ? `${game.scoreA} – ${game.scoreB}`
     : 'Played'

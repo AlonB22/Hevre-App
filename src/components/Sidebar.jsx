@@ -1,8 +1,9 @@
 import {
   Activity, CalendarDays, CircleDollarSign, Home, LogOut,
-  Search, Trophy, Users,
+  Search, Settings2, Trophy, Users,
 } from 'lucide-react'
 import { initials, avatarColor } from '../data'
+import { roleLabel } from '../roles'
 
 const NAV = [
   { id: 'dashboard', label: 'Dashboard',    icon: Home              },
@@ -12,6 +13,7 @@ const NAV = [
   { id: 'players',   label: 'Players',      icon: Users             },
   { id: 'stats',     label: 'Leaderboard',  icon: Trophy            },
   { id: 'payments',  label: 'Payments',     icon: CircleDollarSign  },
+  { id: 'operations', label: 'Operations',   icon: Settings2         },
 ]
 
 export default function Sidebar({ user, view, setView, open, onClose, onLogout, onOpenProfile, userPic }) {
@@ -44,7 +46,7 @@ export default function Sidebar({ user, view, setView, open, onClose, onLogout, 
         </div>
         <div className="sb-user-info">
           <strong>{user.name}</strong>
-          <span>{user.position} · {user.neighborhood}</span>
+          <span>{roleLabel(user.role)} · {user.neighborhood}</span>
         </div>
       </div>
 
