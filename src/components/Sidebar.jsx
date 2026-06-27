@@ -22,7 +22,9 @@ export default function Sidebar({ user, view, setView, open, onClose, onLogout, 
   return (
     <aside className={`sidebar${open ? ' open' : ''}`}>
       <div className="sb-brand">
-        <div className="sb-logo">F</div>
+        <div className="sb-logo" role="img" aria-label="Footy soccer ball logo">
+          <img src="/football-ball.png" alt="" className="soccer-ball-img soccer-ball-img-sm" aria-hidden="true" />
+        </div>
         <div className="sb-brand-txt">
           <strong>Footy</strong>
           <span>Soccer Community</span>

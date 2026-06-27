@@ -84,10 +84,10 @@ input, select, textarea { cursor: text; }
 }
 .sb-logo {
   width: 40px; height: 40px;
-  background: var(--ochre);
-  border-radius: 10px;
+  background: var(--surface);
+  border: 2px solid rgba(255,255,255,0.24);
+  border-radius: 50%;
   display: grid; place-items: center;
-  font-weight: 900; font-size: 22px; color: #fff;
   box-shadow: 3px 3px 0 rgba(0,0,0,0.35);
   flex-shrink: 0;
 }
@@ -278,21 +278,38 @@ input, select, textarea { cursor: text; }
 }
 .login-left::after {
   content: ''; position: absolute;
-  width: 440px; height: 440px;
-  border: 2px solid rgba(255,255,255,0.05);
-  border-radius: 50%; left: 50%; top: 50%;
+  width: min(690px, calc(100% - 32px)); height: 410px;
+  border: 3px solid rgba(255,255,255,0.12);
+  border-bottom: 0;
+  border-radius: 16px 16px 0 0; left: 50%; top: 50%;
   transform: translate(-50%,-50%); pointer-events: none;
+  background-image:
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.085) 0 2px, transparent 2px 62px),
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.085) 0 2px, transparent 2px 50px);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.12);
 }
 
 .login-logo-wrap { position: relative; z-index: 1; }
 .login-logo {
-  width: 90px; height: 90px;
-  background: var(--ochre);
-  border-radius: 24px;
+  width: 142px; height: 94px;
+  background: #fff;
+  border: 3px solid rgba(255,255,255,0.28);
+  border-radius: 28px;
   display: grid; place-items: center;
-  font-size: 50px; font-weight: 900; color: #fff;
   margin: 0 auto 24px;
   box-shadow: 5px 5px 0 rgba(0,0,0,0.35);
+  overflow: hidden;
+}
+.soccer-ball-img {
+  display: block;
+  width: 124px;
+  height: 66px;
+  object-fit: contain;
+  object-position: center;
+}
+.soccer-ball-img-sm {
+  width: 32px;
+  height: 18px;
 }
 .login-logo-wrap h1 {
   font-size: 60px; font-weight: 900;
@@ -316,33 +333,35 @@ input, select, textarea { cursor: text; }
 .login-box h2 { font-size: 28px; font-weight: 900; margin-bottom: 4px; letter-spacing: -0.02em; }
 .login-sub { color: var(--text-3); font-size: 13px; margin-bottom: 28px; }
 
-.ql-label { display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-3); margin-bottom: 10px; }
-.ql-grid  { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 22px; }
-.ql-btn {
-  display: flex; align-items: center; gap: 8px; padding: 10px 12px;
-  background: var(--surface); border: 2px solid var(--border);
-  border-radius: var(--r-sm); text-align: left;
-  transition: all 0.15s; box-shadow: 2px 2px 0 var(--border);
+.auth-switch {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+  padding: 5px; margin-bottom: 22px;
+  background: var(--surface-2); border: 2px solid var(--border);
+  border-radius: 999px;
 }
-.ql-btn:hover { border-color: var(--green); background: var(--green-dim); box-shadow: 3px 3px 0 rgba(45,92,62,0.2); transform: translate(-1px,-1px); }
-.ql-avatar { width: 32px; height: 32px; border-radius: 7px; display: grid; place-items: center; font-size: 11px; font-weight: 800; color: #fff; flex-shrink: 0; }
-.ql-btn > div:nth-child(2) { flex: 1; min-width: 0; }
-.ql-btn strong { display: block; font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.ql-btn span   { font-size: 10px; color: var(--text-3); }
-.ql-btn svg    { color: var(--green); flex-shrink: 0; }
-
-.divider { display: flex; align-items: center; gap: 12px; color: var(--text-3); font-size: 12px; margin-bottom: 22px; }
-.divider::before, .divider::after { content: ''; flex: 1; height: 2px; background: var(--border); }
+.auth-switch button {
+  height: 36px; border: 0; border-radius: 999px;
+  background: transparent; color: var(--text-3);
+  font-size: 13px; font-weight: 900;
+}
+.auth-switch button.active {
+  background: var(--green); color: #fff;
+  box-shadow: 2px 2px 0 rgba(45,92,62,0.25);
+}
 
 .login-form { display: flex; flex-direction: column; gap: 14px; }
 .login-form label { display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 700; color: var(--text-2); }
-.login-form input {
+.login-form input,
+.login-form select {
   height: 44px; padding: 0 14px;
   background: var(--surface); border: 2px solid var(--border);
   border-radius: var(--r-sm); color: var(--text); font-size: 14px; outline: none;
   transition: border-color 0.13s;
 }
-.login-form input:focus { border-color: var(--green); box-shadow: 3px 3px 0 rgba(45,92,62,0.15); }
+.login-form select { appearance: auto; }
+.login-form input:focus,
+.login-form select:focus { border-color: var(--green); box-shadow: 3px 3px 0 rgba(45,92,62,0.15); }
+.signup-grid { display: grid; grid-template-columns: 0.75fr 1.25fr; gap: 10px; }
 .login-err {
   padding: 10px 14px;
   background: rgba(184,94,56,.1); border: 2px solid rgba(184,94,56,.25);
@@ -669,7 +688,7 @@ input, select, textarea { cursor: text; }
   .stat-cards { grid-template-columns: repeat(2,1fr); }
   .players-grid { grid-template-columns: 1fr 1fr; }
   .gc-grid { grid-template-columns: 1fr; }
-  .ql-grid { grid-template-columns: 1fr; }
+  .signup-grid { grid-template-columns: 1fr; }
   .mini-grid { grid-template-columns: repeat(3,1fr); }
   .lb-pos, .lb-gp { display: none; }
   .lb-hdr, .lb-row { grid-template-columns: 38px 1fr 55px; }

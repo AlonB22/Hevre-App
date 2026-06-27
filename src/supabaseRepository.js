@@ -144,6 +144,28 @@ export async function savePlayerProfile(playerId, updates) {
   throwIfError('Save profile', result)
 }
 
+export async function createPlayer(player) {
+  assertSupabase()
+  const result = await supabase.from('players').insert({
+    id: player.id,
+    name: player.name,
+    username: player.username,
+    email: player.email,
+    position: player.position,
+    rating: player.rating,
+    goals: player.goals,
+    assists: player.assists,
+    clean_sheets: player.cleanSheets,
+    games_played: player.gamesPlayed,
+    neighborhood: player.neighborhood,
+    paid: player.paid,
+    role: player.role ?? 'player',
+    bio: player.bio ?? null,
+    avatar_data_url: player.avatarDataUrl ?? null,
+  })
+  throwIfError('Create player', result)
+}
+
 function rowToPlayer(row) {
   return {
     id: row.id,

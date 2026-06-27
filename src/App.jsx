@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Menu, X } from 'lucide-react'
 import { PLAYERS, GAMES, LOCATIONS, INITIAL_RATINGS, autoBalance } from './data'
-import { buildInitialRatings, autoBalanceTS, processGameResult } from './trueskill'
+import { buildInitialRatings, autoBalanceTS, initialRating, processGameResult } from './trueskill'
 import { canManageFields, canManageGame, isOrganizer } from './roles'
 import { isSupabaseConfigured } from './supabaseClient'
 import {
+  createPlayer,
   loadFootyData,
   saveBalanceFeedback,
   savePlayerProfile,
@@ -114,6 +115,36 @@ export default function App() {
     operation().catch(error => {
       console.warn('Supabase write failed:', error)
     })
+  }
+
+  const handleSignup = (draft) => {
+    const email = draft.email.trim().toLowerCase()
+    if (players.some(player => player.email === email)) {
+      return { error: 'An account with that email already exists.' }
+    }
+
+    const nextPlayer = {
+      id: nextPlayerId(players),
+      name: draft.name.trim(),
+      username: usernameFromName(draft.name, players),
+      email,
+      position: draft.position,
+      rating: 7.0,
+      goals: 0,
+      assists: 0,
+      cleanSheets: 0,
+      gamesPlayed: 0,
+      neighborhood: draft.neighborhood.trim(),
+      paid: false,
+    }
+
+    setPlayers(prev => [...prev, nextPlayer])
+    setTsRatings(prev => ({ ...prev, [nextPlayer.id]: initialRating(nextPlayer) }))
+    setUser(nextPlayer)
+    setView('dashboard')
+    persistOrWarn(() => createPlayer(nextPlayer))
+
+    return { player: nextPlayer }
   }
 
   const handleSaveBio = (bio) => {
@@ -290,7 +321,7 @@ export default function App() {
   }
 
   if (!user) {
-    return <Login players={players} onLogin={handleLogin} />
+    return <Login players={players} onLogin={handleLogin} onSignup={handleSignup} />
   }
 
   const pageProps = {
@@ -393,4 +424,23 @@ export default function App() {
       )}
     </div>
   )
+}
+
+function nextPlayerId(players) {
+  return Math.max(...players.map(player => player.id), 0) + 1
+}
+
+function usernameFromName(name, players) {
+  const base = name
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '')
+    .slice(0, 24) || 'player'
+  const taken = new Set(players.map(player => player.username))
+  if (!taken.has(base)) return base
+
+  let suffix = 2
+  while (taken.has(`${base}_${suffix}`)) suffix += 1
+  return `${base}_${suffix}`
 }

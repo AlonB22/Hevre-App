@@ -29,13 +29,29 @@ vi.mock('leaflet', () => ({
 }))
 
 describe('login flow', () => {
-  it('logs in with a configured demo account', () => {
+  it('logs in with configured demo credentials', () => {
     render(<App />)
 
-    fireEvent.click(screen.getByRole('button', { name: /Alon Berla/i }))
+    fireEvent.change(screen.getByLabelText(/email/i), { target: { value: PLAYERS[0].email } })
+    fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'test-demo-password' } })
     fireEvent.click(screen.getByRole('button', { name: /sign in/i }))
 
     expect(screen.getByRole('heading', { name: /Welcome back, Alon/i })).toBeInTheDocument()
+  })
+
+  it('signs up a new player and opens the dashboard', () => {
+    render(<App />)
+
+    fireEvent.click(screen.getByRole('tab', { name: /sign up/i }))
+    fireEvent.change(screen.getByLabelText(/full name/i), { target: { value: 'Maya Cohen' } })
+    fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'maya@footy.app' } })
+    fireEvent.change(screen.getByLabelText(/position/i), { target: { value: 'ST' } })
+    fireEvent.change(screen.getByLabelText(/neighborhood/i), { target: { value: 'Ramat Gan' } })
+    fireEvent.change(screen.getByLabelText(/^password$/i), { target: { value: 'test-demo-password' } })
+    fireEvent.change(screen.getByLabelText(/confirm password/i), { target: { value: 'test-demo-password' } })
+    fireEvent.click(screen.getByRole('button', { name: /create account/i }))
+
+    expect(screen.getByRole('heading', { name: /Welcome back, Maya/i })).toBeInTheDocument()
   })
 
   it('shows an error for a wrong demo password', () => {

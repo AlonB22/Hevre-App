@@ -1,22 +1,13 @@
 import { useState } from 'react'
-import { ChevronRight, Zap } from 'lucide-react'
-import { DEMO_PASSWORD, isDemoPasswordConfigured, initials, avatarColor } from '../data'
+import { ChevronRight } from 'lucide-react'
+import { DEMO_PASSWORD, isDemoPasswordConfigured } from '../data'
+import Signup from './Signup'
 
-const QUICK = [
-  { id: 1,  sub: 'CAM · Ramat Gan' },
-  { id: 2,  sub: 'GK · Tel Aviv'   },
-  { id: 3,  sub: 'ST · Givatayim'  },
-]
-
-export default function Login({ players, onLogin }) {
+export default function Login({ players, onLogin, onSignup }) {
   const [email, setEmail]       = useState('')
   const [password, setPassword] = useState('')
   const [error, setError]       = useState('')
-
-  const prefill = (playerId) => {
-    const p = players.find(x => x.id === playerId)
-    if (p) { setEmail(p.email); setPassword(DEMO_PASSWORD); setError('') }
-  }
+  const [mode, setMode]         = useState('signin')
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -32,7 +23,9 @@ export default function Login({ players, onLogin }) {
       {/* Left panel */}
       <div className="login-left">
         <div className="login-logo-wrap">
-          <div className="login-logo">F</div>
+          <div className="login-logo" role="img" aria-label="Footy soccer ball logo">
+            <img src="/football-ball.png" alt="" className="soccer-ball-img" aria-hidden="true" />
+          </div>
           <h1>Footy</h1>
           <p>Your neighborhood soccer community, upgraded.</p>
         </div>
@@ -49,57 +42,65 @@ export default function Login({ players, onLogin }) {
           <h2>Sign in</h2>
           <p className="login-sub">Step onto the pitch.</p>
 
-          <span className="ql-label">Quick demo — sign in as</span>
-          <div className="ql-grid">
-            {QUICK.map(q => {
-              const p = players.find(x => x.id === q.id)
-              return (
-                <button key={q.id} className="ql-btn" onClick={() => prefill(q.id)}>
-                  <div className="ql-avatar" style={{ background: avatarColor(q.id) }}>
-                    {initials(p.name)}
-                  </div>
-                  <div>
-                    <strong>{p.name}</strong>
-                    <span>{q.sub}</span>
-                  </div>
-                  <Zap size={13} />
-                </button>
-              )
-            })}
+          <div className="auth-switch" role="tablist" aria-label="Authentication mode">
+            <button
+              type="button"
+              className={mode === 'signin' ? 'active' : ''}
+              onClick={() => { setMode('signin'); setError('') }}
+              role="tab"
+              aria-selected={mode === 'signin'}
+            >
+              Sign in
+            </button>
+            <button
+              type="button"
+              className={mode === 'signup' ? 'active' : ''}
+              onClick={() => { setMode('signup'); setError('') }}
+              role="tab"
+              aria-selected={mode === 'signup'}
+            >
+              Sign up
+            </button>
           </div>
 
-          <div className="divider"><span>or enter credentials</span></div>
-
-          <form className="login-form" onSubmit={handleSubmit}>
-            <label>
-              Email
-              <input
-                type="email"
-                value={email}
-                placeholder="alon@footy.app"
-                required
-                onChange={e => { setEmail(e.target.value); setError('') }}
-              />
-            </label>
-            <label>
-              Password
-              <input
-                type="password"
-                value={password}
-                placeholder="Demo password"
-                required
-                onChange={e => { setPassword(e.target.value); setError('') }}
-              />
-            </label>
-            {error && <div className="login-err">{error}</div>}
-            <button type="submit" className="login-submit">
-              Sign In <ChevronRight size={16} />
-            </button>
-          </form>
-
-          <p className="login-hint">
-            Demo credentials are loaded from local environment configuration.
-          </p>
+          {mode === 'signin' ? (
+            <form className="login-form" onSubmit={handleSubmit}>
+              <label>
+                Email
+                <input
+                  type="email"
+                  value={email}
+                  placeholder="name@example.com"
+                  required
+                  onChange={e => { setEmail(e.target.value); setError('') }}
+                />
+              </label>
+              <label>
+                Password
+                <input
+                  type="password"
+                  value={password}
+                  placeholder="password"
+                  required
+                  onChange={e => { setPassword(e.target.value); setError('') }}
+                />
+              </label>
+              {error && <div className="login-err">{error}</div>}
+              <button type="submit" className="login-submit">
+                Sign In <ChevronRight size={16} />
+              </button>
+            </form>
+          ) : (
+            <Signup
+              players={players}
+              onSignup={onSignup}
+              onSignedUp={(player) => {
+                setEmail(player.email)
+                setPassword('')
+                setMode('signin')
+              }}
+            />
+          )}
         </div>
       </div>
     </div>
