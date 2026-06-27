@@ -1,4 +1,6 @@
 import { describe, it, expect } from 'vitest'
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
 import {
   PLAYERS, GAMES, LOCATIONS, INITIAL_RATINGS, DEMO_PASSWORD, isDemoPasswordConfigured,
   avatarColor, initials, formatDate, spotsLeft, fieldIcon,
@@ -10,6 +12,8 @@ import {
 import {
   ROLES, canManageFields, canManageGame, isMunicipalityAdmin, isOrganizer, roleLabel,
 } from '../roles'
+
+const packageJson = JSON.parse(readFileSync(join(process.cwd(), 'package.json'), 'utf8'))
 
 // ─── Utility functions ───────────────────────────────────────────────
 
@@ -96,6 +100,12 @@ describe('demo password', () => {
   })
 })
 
+describe('Footy branding', () => {
+  it('uses Footy package identity', () => {
+    expect(packageJson.name).toBe('footy')
+  })
+})
+
 describe('PLAYERS array', () => {
   it('has exactly 45 players', () => {
     expect(PLAYERS).toHaveLength(45)
@@ -131,6 +141,11 @@ describe('PLAYERS array', () => {
   it('no duplicate emails', () => {
     const emails = PLAYERS.map(p => p.email)
     expect(new Set(emails).size).toBe(45)
+  })
+  it('uses the Footy demo email domain for every player', () => {
+    for (const player of PLAYERS) {
+      expect(player.email).toMatch(/@footy\.app$/)
+    }
   })
   it('all organizerIds point to organizer-capable users', () => {
     for (const game of GAMES) {

@@ -37,7 +37,7 @@ export default function Login({ players, onLogin }) {
           <p>Your neighborhood soccer community, upgraded.</p>
         </div>
         <div className="login-metrics">
-          <div><strong>30</strong><span>Players</span></div>
+          <div><strong>45</strong><span>Players</span></div>
           <div><strong>15+</strong><span>Games</span></div>
           <div><strong>5</strong><span>Cities</span></div>
         </div>
@@ -76,7 +76,7 @@ export default function Login({ players, onLogin }) {
               <input
                 type="email"
                 value={email}
-                placeholder="alon@hevre.app"
+                placeholder="alon@footy.app"
                 required
                 onChange={e => { setEmail(e.target.value); setError('') }}
               />

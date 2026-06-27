@@ -5,7 +5,7 @@ import { buildInitialRatings, autoBalanceTS, processGameResult } from './trueski
 import { canManageFields, canManageGame, isOrganizer } from './roles'
 import { isSupabaseConfigured } from './supabaseClient'
 import {
-  loadHevreData,
+  loadFootyData,
   saveBalanceFeedback,
   savePlayerProfile,
   savePublished,
@@ -74,7 +74,7 @@ export default function App() {
     async function loadFromSupabase() {
       if (!isSupabaseConfigured) return
       try {
-        const data = await loadHevreData()
+        const data = await loadFootyData()
         if (!data || cancelled) return
 
         setPlayers(data.players)

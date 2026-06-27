@@ -13,7 +13,7 @@ function throwIfError(label, result) {
   return result.data ?? []
 }
 
-export async function loadHevreData() {
+export async function loadFootyData() {
   if (!isSupabaseConfigured || !supabase) return null
 
   const [

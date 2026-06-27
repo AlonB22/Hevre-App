@@ -1,5 +1,7 @@
 node_modules/
 dist/
+build/
+coverage/
 
 # Local environment files
 .env
@@ -10,6 +12,8 @@ dist/
 *.log
 logs/
 vite-dev*.log
+*.tsbuildinfo
+.vite/
 
 # Local notes and generated exports
 tasks/
@@ -25,3 +29,11 @@ desktop.ini
 # Supabase local development runtime
 supabase/.branches/
 supabase/.temp/
+
+# Test and browser automation artifacts
+playwright-report/
+test-results/
+
+# Package manager caches
+.npm/
+.pnpm-store/
