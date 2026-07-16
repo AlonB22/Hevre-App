@@ -63,6 +63,16 @@ Suggested screenshots for this section:
 
 ## 3. Roles and Responsibilities
 
+### 3.1 Team Members
+
+| Name | Student ID | Main Responsibility |
+|---|---|---|
+| Ilia Simhovich | To be completed | Fair-match algorithm and player rating system |
+| Alon Berla | To be completed | Database, Supabase, data model and persistence |
+| Yoel Kraitman | To be completed | Server, deployment and production environment |
+
+Note: student ID numbers were not found in the repository files. They should be filled in manually before final submission if required by the college.
+
 ### Ilia Simhovich
 
 Ilia was responsible for the fair-game algorithm and player rating logic:
@@ -230,18 +240,20 @@ npm test
 
 ## 9. Bibliography
 
-Recommended references:
+The literature review was used to justify the algorithmic and architectural decisions in the project:
 
-1. Herbrich, R., Minka, T., & Graepel, T. (2007). **TrueSkill: A Bayesian Skill Rating System**. Microsoft Research / NeurIPS.
-2. Minka, T. et al. (2018). **TrueSkill 2: An improved Bayesian skill rating system**. Microsoft Research.
-3. Elo, A. (1978). **The Rating of Chessplayers, Past and Present**.
-4. Glickman, M. (2012). **Example of the Glicko-2 System**.
-5. Gale, D., & Shapley, L. (1962). **College Admissions and the Stability of Marriage**.
-6. Cormen, Leiserson, Rivest, Stein. **Introduction to Algorithms** - Greedy Algorithms.
-7. React Documentation - https://react.dev
-8. Vite Documentation - https://vite.dev
-9. Supabase Documentation - https://supabase.com/docs
-10. Leaflet Documentation - https://leafletjs.com
+| # | Source | Used For |
+|---|---|---|
+| 1 | Herbrich, R., Minka, T., & Graepel, T. (2007). **TrueSkill: A Bayesian Skill Rating System**. Microsoft Research / NeurIPS. https://www.microsoft.com/en-us/research/publication/trueskilltm-a-bayesian-skill-rating-system/ | Basis for player skill rating with mu and sigma |
+| 2 | Minka, T. et al. (2018). **TrueSkill 2: An improved Bayesian skill rating system**. Microsoft Research. https://www.microsoft.com/en-us/research/wp-content/uploads/2018/03/trueskill2.pdf | Extension ideas for future AI balancing using more player signals |
+| 3 | Elo, A. (1978). **The Rating of Chessplayers, Past and Present**. | Comparison point: why Elo is less suitable for team games |
+| 4 | Glickman, M. (2012). **Example of the Glicko-2 System**. http://www.glicko.net/glicko/glicko2.pdf | Alternative rating model with uncertainty |
+| 5 | Gale, D., & Shapley, L. (1962). **College Admissions and the Stability of Marriage**. American Mathematical Monthly. | Alternative for matching players to games by preferences |
+| 6 | Cormen, T., Leiserson, C., Rivest, R., & Stein, C. **Introduction to Algorithms** - Greedy Algorithms. | Greedy design pattern used in team split |
+| 7 | React Documentation - https://react.dev | Frontend component model and UI architecture |
+| 8 | Vite Documentation - https://vite.dev | Build tool and local development server |
+| 9 | Supabase Documentation - https://supabase.com/docs | Backend-as-a-Service, database and API design |
+| 10 | Leaflet Documentation - https://leafletjs.com | Map UI and match location display |
 
 ## 10. Submission Package
 
