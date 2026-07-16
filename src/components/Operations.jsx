@@ -15,7 +15,7 @@ import { canManageFields, canManageGame, isOrganizer, roleLabel } from '../roles
 
 const EMPTY_GAME = {
   title: '',
-  date: '2026-06-30',
+  date: '2026-08-24',
   time: '21:00',
   format: '7v7',
   locationId: 1,
@@ -481,7 +481,7 @@ function buildFieldState(locations) {
 
 function buildAvailabilityDays(games) {
   const dates = [...new Set(games.map(game => game.date))].sort()
-  return dates.slice(0, 4).length ? dates.slice(0, 4) : ['2026-06-23', '2026-06-24', '2026-06-25', '2026-06-26']
+  return dates.slice(0, 4).length ? dates.slice(0, 4) : ['2026-08-24', '2026-08-25', '2026-08-26', '2026-08-27']
 }
 
 function buildNotificationPreview({ user, selectedGame, locations }) {

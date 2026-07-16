@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <title>Footy - ספר הפרויקט</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; color: #1b1b1b; line-height: 1.65; }
+    h1, h2, h3 { color: #17452f; }
+    h1 { font-size: 34px; border-bottom: 4px solid #c99433; padding-bottom: 12px; }
+    h2 { margin-top: 34px; border-bottom: 1px solid #ddd4bf; padding-bottom: 6px; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; direction: rtl; }
+    th, td { border: 1px solid #d8cfba; padding: 8px 10px; vertical-align: top; }
+    th { background: #f3ead5; color: #17452f; }
+    code, pre { direction: ltr; text-align: left; background: #f7f2e8; padding: 2px 5px; border-radius: 4px; }
+    pre { padding: 12px; overflow: auto; }
+    .cover { text-align: center; margin: 90px 0 120px; }
+    .cover h1 { border: 0; font-size: 48px; }
+    .subtitle { color: #6b5c41; font-size: 18px; }
+    .page-break { page-break-before: always; }
+  </style>
+</head>
+<body>
+  <section class="cover">
+    <h1>Footy</h1>
+    <p class="subtitle">אפליקציית ווב לניהול קהילת כדורגל שכונתית</p>
+    <p>גרסה סופית להגשת הפרויקט | יולי 2026</p>
+  </section>
+
+  <h2>1. תקציר הפרויקט</h2>
+  <p>
+    Footy היא אפליקציית React/Vite לניהול משחקי כדורגל קהילתיים. המערכת מאפשרת
+    התחברות והרשמה, איתור משחקים על מפה, RSVP, פרופילי שחקנים, ניהול קבוצות,
+    דירוג שחקנים לאחר משחק, תשלומים, כלי תפעול למארגנים וחיבור אופציונלי ל-Supabase.
+  </p>
+
+  <h2>2. מה היה פעם ומה עכשיו</h2>
+  <h3>2.1 Hevre - אבטיפוס ראשון</h3>
+  <p>
+    הגרסה הראשונה, Hevre, הציגה מסך שבועי בסיסי עם משחק אחד, חלוקת קבוצות,
+    תשלומים, משוב איזון ולוח מובילים. היא שימשה כהוכחת רעיון ראשונית.
+  </p>
+  <ul>
+    <li>יתרונות: ממשק פשוט, חלוקת קבוצות גלויה, רעיון ראשוני למשוב איזון.</li>
+    <li>חסרונות: ללא התחברות אמיתית, ללא בסיס נתונים, ללא דירוג דינמי וללא מפה.</li>
+  </ul>
+
+  <h3>2.2 Footy - הגרסה הנוכחית</h3>
+  <p>
+    הגרסה הנוכחית מרחיבה את הרעיון למערכת מלאה: 45 שחקנים, משחקים עתידיים,
+    מפה, הרשמה, ניהול משחקים, דירוגים חיים, אלגוריתם איזון, וסביבת Deploy ל-Vercel.
+  </p>
+
+  <table>
+    <tr><th>תחום</th><th>Hevre הישן</th><th>Footy הנוכחי</th></tr>
+    <tr><td>משתמשים</td><td>רשימה סטטית</td><td>45 שחקנים, הרשמה ופרופילים</td></tr>
+    <tr><td>משחקים</td><td>משחק שבועי אחד</td><td>משחקים עתידיים ועבר, RSVP ומפה</td></tr>
+    <tr><td>איזון קבוצות</td><td>חלוקה ידנית/סטטית</td><td>דירוג חי + אלגוריתם Greedy</td></tr>
+    <tr><td>נתונים</td><td>Mock מקומי בלבד</td><td>Mock מקומי + Supabase אופציונלי</td></tr>
+    <tr><td>תפעול</td><td>אין</td><td>Operations למארגנים ואדמין</td></tr>
+  </table>
+
+  <h2>3. חלוקת אחריות</h2>
+  <table>
+    <tr><th>חבר צוות</th><th>אחריות</th></tr>
+    <tr>
+      <td>איליה סימחוביץ'</td>
+      <td>אלגוריתם משחקים שווים, דירוג שחקנים, מודל mu/sigma, איזון קבוצות Greedy, חיבור ל-Match Manager.</td>
+    </tr>
+    <tr>
+      <td>אלון ברלה</td>
+      <td>בסיסי נתונים, Supabase, סכמת DB, שכבת repository, signup, שמירת נתונים וניהול סודות.</td>
+    </tr>
+    <tr>
+      <td>יואל קרייטמן</td>
+      <td>שרת ופריסה, הכנת Vercel, משתני סביבה, בדיקת הרצה חיצונית וחיבור ל-Supabase.</td>
+    </tr>
+  </table>
+
+  <h2>4. ארכיטקטורה</h2>
+  <ul>
+    <li>Frontend: React 19 + Vite.</li>
+    <li>UI Components: תיקיית <code>src/components</code>.</li>
+    <li>Data: קובץ <code>src/data.js</code>.</li>
+    <li>Algorithm: קובץ <code>src/trueskill.js</code>.</li>
+    <li>Roles: קובץ <code>src/roles.js</code>.</li>
+    <li>Backend: Supabase דרך <code>src/supabaseClient.js</code> ו-<code>src/supabaseRepository.js</code>.</li>
+    <li>Database migrations: תיקיית <code>supabase/migrations</code>.</li>
+  </ul>
+
+  <h2>5. האלגוריתם</h2>
+  <h3>5.1 דירוג שחקנים</h3>
+  <p>
+    לכל שחקן יש שני ערכים: <strong>mu</strong> שמייצג את רמת השחקן המשוערת,
+    ו-<strong>sigma</strong> שמייצג את רמת חוסר הוודאות. שחקנים ותיקים מקבלים
+    sigma נמוך יותר, ושחקנים חדשים מקבלים sigma גבוה יותר כדי שהמערכת תלמד אותם מהר.
+  </p>
+  <p>
+    לאחר סיום משחק, המנצחים מקבלים תוספת ל-mu, המפסידים יורדים, וניצחון של קבוצה
+    חלשה מול קבוצה חזקה גורם לשינוי גדול יותר. כך הדירוג לומד מהיסטוריית המשחקים.
+  </p>
+
+  <h3>5.2 Greedy Team Balancing</h3>
+  <p>
+    האלגוריתם ממיין את השחקנים לפי mu מהגבוה לנמוך, ואז בכל צעד מכניס את השחקן
+    הבא לקבוצה שסכום ה-mu שלה נמוך יותר. התוצאה היא חלוקה מהירה, יציבה וברורה.
+  </p>
+  <pre>
+1. Sort players by live mu
+2. Start Team A and Team B empty
+3. Put each next player into the team with lower total mu
+4. Show match quality percentage
+  </pre>
+
+  <h2>6. בסיס נתונים ושרת</h2>
+  <p>
+    Supabase משמש כבסיס נתונים אופציונלי. אם לא מוגדרים מפתחות Supabase,
+    האפליקציה עובדת על נתוני הדמו המקומיים. אם מוגדרים מפתחות, ניתן לשמור RSVP,
+    קבוצות, פרופילים, דירוגים ומשוב איזון בענן.
+  </p>
+
+  <h2>7. פריסה</h2>
+  <p>
+    הפרויקט מוכן לפריסה חינמית:
+  </p>
+  <ul>
+    <li>Frontend: Vercel Free Plan.</li>
+    <li>Backend: Supabase Free Plan.</li>
+  </ul>
+  <p>הגדרות Vercel:</p>
+  <pre>
+Build command: npm run build
+Output directory: dist
+Environment:
+VITE_DEMO_PASSWORD=footy123
+VITE_SUPABASE_URL=...
+VITE_SUPABASE_ANON_KEY=...
+  </pre>
+
+  <h2>8. בדיקות</h2>
+  <p>
+    הפרויקט כולל בדיקות Vitest ו-React Testing Library. הבדיקות מכסות תקינות נתונים,
+    זרימות UI, signup, דירוגים, איזון קבוצות וסיום משחק.
+  </p>
+  <pre>npm test</pre>
+
+  <h2>9. תמונות למסמך</h2>
+  <p>יש לשלב במסמך הסופי את התמונות הבאות:</p>
+  <ul>
+    <li>Hevre הישן: Dashboard, Team Split, Payments, Balance Feedback, Leaderboard.</li>
+    <li>Footy החדש: Login, Dashboard, Find Matches map.</li>
+    <li>מומלץ להוסיף: Match Manager, Players page, Operations page, Profile modal.</li>
+  </ul>
+
+  <h2>10. ביבליוגרפיה</h2>
+  <ol>
+    <li>Herbrich, R., Minka, T., Graepel, T. TrueSkill: A Bayesian Skill Rating System, Microsoft Research / NeurIPS, 2007.</li>
+    <li>Minka, T. et al. TrueSkill 2: An improved Bayesian skill rating system, Microsoft Research, 2018.</li>
+    <li>Elo, A. The Rating of Chessplayers, Past and Present, 1978.</li>
+    <li>Glickman, M. Example of the Glicko-2 System.</li>
+    <li>Gale, D., Shapley, L. College Admissions and the Stability of Marriage, 1962.</li>
+    <li>Cormen, Leiserson, Rivest, Stein. Introduction to Algorithms - Greedy Algorithms.</li>
+    <li>React Documentation, Vite Documentation, Supabase Documentation, Leaflet Documentation.</li>
+  </ol>
+
+  <h2>11. הנחיות הגשה</h2>
+  <ul>
+    <li>להגיש ZIP עם קוד המקור בלבד.</li>
+    <li>לא לכלול <code>node_modules</code>, <code>dist</code>, <code>coverage</code>, <code>.env</code>.</li>
+    <li>לכלול <code>README.md</code> עם הוראות התקנה והרצה.</li>
+    <li>לצרף PDF יחיד עם כל מסמכי הפרויקט.</li>
+  </ul>
+</body>
+</html>
