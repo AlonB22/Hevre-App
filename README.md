@@ -114,6 +114,36 @@ npm run db:seed
 
 The seed command requires `SUPABASE_SERVICE_ROLE_KEY` in `.env`. Do not expose that key in the browser or commit it to Git.
 
+## Repository
+
+```text
+https://github.com/AlonB22/Hevre-App
+```
+
+## Live Demo
+
+The app is **Vercel-ready** but is **not deployed online yet** from this workspace. There is no live `*.vercel.app` URL in the repo right now.
+
+To publish before submission:
+
+1. Sign in at [vercel.com](https://vercel.com).
+2. Click **Add New → Project** and import `AlonB22/Hevre-App`.
+3. Keep the default Vite settings:
+   - Build command: `npm run build`
+   - Output directory: `dist`
+4. Add environment variable:
+   - `VITE_DEMO_PASSWORD=footy123`
+5. Deploy and copy the production URL (for example `https://hevre-app.vercel.app`).
+
+Optional Supabase variables:
+
+```text
+VITE_SUPABASE_URL=...
+VITE_SUPABASE_ANON_KEY=...
+```
+
+Until Vercel is connected, graders can run the app locally with the steps below.
+
 ## Deployment
 
 Recommended free deployment:

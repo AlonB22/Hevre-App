@@ -67,9 +67,9 @@ Suggested screenshots for this section:
 
 | Name | Student ID | Main Responsibility |
 |---|---|---|
-| Ilia Simhovich | To be completed | Fair-match algorithm and player rating system |
-| Alon Berla | To be completed | Database, Supabase, data model and persistence |
-| Yoel Kraitman | To be completed | Server, deployment and production environment |
+| Ilia Simhovich | 323637793 | Fair-match algorithm and player rating system |
+| Alon Berla | 208544064 | Database, Supabase, data model and persistence |
+| Yoel Kraitman | 209710615 | Server, deployment and production environment |
 
 Note: student ID numbers were not found in the repository files. They should be filled in manually before final submission if required by the college.
 

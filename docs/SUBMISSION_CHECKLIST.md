@@ -46,6 +46,15 @@ npm run build
 
 Both commands should pass before creating the ZIP.
 
+Current verified status:
+
+- Tests: **65/65 passed**
+- Build: **passes**
+- GitHub repo: `https://github.com/AlonB22/Hevre-App`
+- Live Vercel URL: **deploy manually** (see README → Live Demo)
+- Submission PDF: `docs/Footy-Project-Book.pdf`
+- English project book (separate folder): `Footy-English-Project-Book/Footy-English-Project-Book.pdf`
+
 ## Free Hosting
 
 Recommended:
