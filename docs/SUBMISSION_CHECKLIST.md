@@ -46,14 +46,20 @@ npm run build
 
 Both commands should pass before creating the ZIP.
 
-Current verified status:
+Current verified status (17 Jul 2026):
 
 - Tests: **65/65 passed**
 - Build: **passes**
-- GitHub repo: `https://github.com/AlonB22/Hevre-App`
-- Live Vercel URL: **deploy manually** (see README → Live Demo)
-- Submission PDF: `docs/Footy-Project-Book.pdf`
-- English project book (separate folder): `Footy-English-Project-Book/Footy-English-Project-Book.pdf`
+- GitHub: `https://github.com/AlonB22/Hevre-App` (branch `main`)
+- Submission ZIP: `FINALS PRO/Footy-Submission.zip`
+- Submission PDF: `hevre-v2/docs/Footy-Project-Book.pdf`
+
+## What To Upload (2 files only)
+
+1. **ZIP** — source code (`Footy-Submission.zip`)
+2. **PDF** — project book (`Footy-Project-Book.pdf`)
+
+Do **not** upload links instead of files. Only one team member should submit.
 
 ## Free Hosting
 

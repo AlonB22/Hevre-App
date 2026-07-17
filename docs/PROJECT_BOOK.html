@@ -13,17 +13,31 @@
     th { background: #f3ead5; color: #17452f; }
     code, pre { direction: ltr; text-align: left; background: #f7f2e8; padding: 2px 5px; border-radius: 4px; }
     pre { padding: 12px; overflow: auto; }
-    .cover { text-align: center; margin: 90px 0 120px; }
-    .cover h1 { border: 0; font-size: 48px; }
-    .subtitle { color: #6b5c41; font-size: 18px; }
-    .page-break { page-break-before: always; }
+    .cover { text-align: center; margin: 90px 0 120px; background: linear-gradient(135deg, #123b29, #1f5a3d); color: #f6ead3; border-radius: 18px; padding: 48px 24px; }
+    .cover h1 { border: 0; font-size: 48px; color: #f6ead3; }
+    .cover .subtitle { color: #d7b35a; font-size: 18px; }
+    .cover .ids { margin-top: 24px; line-height: 1.9; font-size: 15px; }
+    .screenshot-grid { display: grid; gap: 10px 12px; margin: 12px 0 20px; }
+    .screenshot-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+    .screenshot-grid .span-2 { grid-column: 1 / -1; }
+    .shot img { width: 100%; max-height: 320px; object-fit: contain; border: 1px solid #d8cfba; border-radius: 8px; background: #fff; }
+    .version-page.footy .shot img { max-height: 220px; }
+    .version-page.footy .span-2 img { max-height: 250px; }
+    .caption { font-size: 11px; color: #6b5c41; margin-top: 4px; font-style: italic; }
+    .version-page + .version-page { page-break-before: always; break-before: page; }
+    h2, h3, table, ul, p, .version-page { page-break-inside: avoid; break-inside: avoid; }
   </style>
 </head>
 <body>
   <section class="cover">
     <h1>Footy</h1>
     <p class="subtitle">אפליקציית ווב לניהול קהילת כדורגל שכונתית</p>
-    <p>גרסה סופית להגשת הפרויקט | יולי 2026</p>
+    <p>גרסה סופית להגשת הפרויקט</p>
+    <div class="ids">
+      <div>איליה סימחוביץ' — 323637793</div>
+      <div>אלון ברלה — 208544064</div>
+      <div>יואל קרייטמן — 209710615</div>
+    </div>
   </section>
 
   <h2>1. תקציר הפרויקט</h2>
@@ -59,8 +73,42 @@
     <tr><td>תפעול</td><td>אין</td><td>Operations למארגנים ואדמין</td></tr>
   </table>
 
-  <h2>3. חלוקת אחריות</h2>
-  <h3>3.1 חברי צוות</h3>
+  </table>
+
+  <h2>3. צילומי מסך</h2>
+  <div class="version-page hevre">
+    <h3>3.1 Hevre — גרסה ישנה</h3>
+    <div class="screenshot-grid cols-2">
+      <div class="shot">
+        <img src="images/hevre-dashboard.jpg" alt="Hevre dashboard">
+        <div class="caption">מסך שבועי: חלוקת קבוצות, תשלומים ומשוב איזון.</div>
+      </div>
+      <div class="shot">
+        <img src="images/hevre-leaderboard.jpg" alt="Hevre leaderboard">
+        <div class="caption">לוח מובילים ורשימת משחקים קרובים.</div>
+      </div>
+    </div>
+  </div>
+  <div class="version-page footy">
+    <h3>3.2 Footy — גרסה נוכחית</h3>
+    <div class="screenshot-grid cols-2">
+      <div class="shot">
+        <img src="images/footy-login.jpg" alt="Footy login">
+        <div class="caption">מסך התחברות והרשמה.</div>
+      </div>
+      <div class="shot">
+        <img src="images/footy-dashboard.jpg" alt="Footy dashboard">
+        <div class="caption">Dashboard אישי לאחר התחברות.</div>
+      </div>
+      <div class="shot span-2">
+        <img src="images/footy-map.jpg" alt="Footy map">
+        <div class="caption">Find Matches — מפה עם Leaflet/OpenStreetMap.</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>4. חלוקת אחריות</h2>
+  <h3>4.1 חברי צוות</h3>
   <table>
     <tr><th>שם מלא</th><th>תעודת זהות</th><th>אחריות מרכזית</th></tr>
     <tr><td>איליה סימחוביץ'</td><td>323637793</td><td>אלגוריתם משחקים שווים ודירוג שחקנים</td></tr>
@@ -84,19 +132,31 @@
     </tr>
   </table>
 
-  <h2>4. ארכיטקטורה</h2>
-  <ul>
-    <li>Frontend: React 19 + Vite.</li>
-    <li>UI Components: תיקיית <code>src/components</code>.</li>
-    <li>Data: קובץ <code>src/data.js</code>.</li>
-    <li>Algorithm: קובץ <code>src/trueskill.js</code>.</li>
-    <li>Roles: קובץ <code>src/roles.js</code>.</li>
-    <li>Backend: Supabase דרך <code>src/supabaseClient.js</code> ו-<code>src/supabaseRepository.js</code>.</li>
-    <li>Database migrations: תיקיית <code>supabase/migrations</code>.</li>
-  </ul>
+  <h2>5. ארכיטקטורה</h2>
+  <table>
+    <tr><th>שכבה</th><th>קבצים / כלים</th><th>תפקיד</th></tr>
+    <tr><td>UI</td><td><code>src/components/</code></td><td>מסכי React וקומפוננטות</td></tr>
+    <tr><td>Data</td><td><code>src/data.js</code></td><td>45 שחקנים, משחקים, מיקומים</td></tr>
+    <tr><td>Algorithm</td><td><code>src/trueskill.js</code></td><td>דירוג TrueSkill-style ואיכות משחק</td></tr>
+    <tr><td>Roles</td><td><code>src/roles.js</code></td><td>Player / Organizer / Admin</td></tr>
+    <tr><td>Backend</td><td><code>src/supabaseClient.js</code>, <code>src/supabaseRepository.js</code></td><td>חיבור ושמירת נתונים</td></tr>
+    <tr><td>DB</td><td><code>supabase/migrations/</code></td><td>סכמת SQL</td></tr>
+    <tr><td>Tests</td><td><code>src/test/</code></td><td>65 בדיקות אוטומטיות</td></tr>
+  </table>
 
-  <h2>5. האלגוריתם</h2>
-  <h3>5.1 דירוג שחקנים</h3>
+  <h2>6. כלים, ספריות ותוספים</h2>
+  <table>
+    <tr><th>כלי / ספרייה</th><th>שימוש</th></tr>
+    <tr><td>React 19 + Vite 8</td><td>Frontend ו-build</td></tr>
+    <tr><td>Leaflet + OpenStreetMap</td><td>מפת משחקים</td></tr>
+    <tr><td>Lucide React</td><td>אייקונים</td></tr>
+    <tr><td>Supabase JS</td><td>Backend אופציונלי</td></tr>
+    <tr><td>Vitest + React Testing Library</td><td>בדיקות</td></tr>
+    <tr><td>Vercel</td><td>פריסה חינמית</td></tr>
+  </table>
+
+  <h2>7. האלגוריתם</h2>
+  <h3>7.1 דירוג שחקנים</h3>
   <p>
     לכל שחקן יש שני ערכים: <strong>mu</strong> שמייצג את רמת השחקן המשוערת,
     ו-<strong>sigma</strong> שמייצג את רמת חוסר הוודאות. שחקנים ותיקים מקבלים
@@ -107,7 +167,7 @@
     חלשה מול קבוצה חזקה גורם לשינוי גדול יותר. כך הדירוג לומד מהיסטוריית המשחקים.
   </p>
 
-  <h3>5.2 Greedy Team Balancing</h3>
+  <h3>7.2 Greedy Team Balancing</h3>
   <p>
     האלגוריתם ממיין את השחקנים לפי mu מהגבוה לנמוך, ואז בכל צעד מכניס את השחקן
     הבא לקבוצה שסכום ה-mu שלה נמוך יותר. התוצאה היא חלוקה מהירה, יציבה וברורה.
@@ -119,21 +179,21 @@
 4. Show match quality percentage
   </pre>
 
-  <h2>6. בסיס נתונים ושרת</h2>
+  <h2>8. בסיס נתונים ושרת</h2>
   <p>
     Supabase משמש כבסיס נתונים אופציונלי. אם לא מוגדרים מפתחות Supabase,
     האפליקציה עובדת על נתוני הדמו המקומיים. אם מוגדרים מפתחות, ניתן לשמור RSVP,
     קבוצות, פרופילים, דירוגים ומשוב איזון בענן.
   </p>
 
-  <h2>7. פריסה</h2>
-  <p>
-    הפרויקט מוכן לפריסה חינמית:
-  </p>
-  <ul>
-    <li>Frontend: Vercel Free Plan.</li>
-    <li>Backend: Supabase Free Plan.</li>
-  </ul>
+  <h2>9. פריסה והרצה מקומית</h2>
+  <p>הפרויקט מוכן לפריסה חינמית ב-Vercel (Frontend) ו-Supabase (Backend אופציונלי).</p>
+  <pre>
+npm install
+npm run dev
+Open: http://localhost:5173
+Demo: ilia@footy.app / footy123
+  </pre>
   <p>הגדרות Vercel:</p>
   <pre>
 Build command: npm run build
@@ -144,22 +204,15 @@ VITE_SUPABASE_URL=...
 VITE_SUPABASE_ANON_KEY=...
   </pre>
 
-  <h2>8. בדיקות</h2>
+  <h2>10. בדיקות</h2>
   <p>
-    הפרויקט כולל בדיקות Vitest ו-React Testing Library. הבדיקות מכסות תקינות נתונים,
+    הפרויקט כולל 65 בדיקות Vitest ו-React Testing Library. הבדיקות מכסות תקינות נתונים,
     זרימות UI, signup, דירוגים, איזון קבוצות וסיום משחק.
   </p>
   <pre>npm test</pre>
+  <p>תוצאה מאומתת: <strong>65/65 passed</strong></p>
 
-  <h2>9. תמונות למסמך</h2>
-  <p>יש לשלב במסמך הסופי את התמונות הבאות:</p>
-  <ul>
-    <li>Hevre הישן: Dashboard, Team Split, Payments, Balance Feedback, Leaderboard.</li>
-    <li>Footy החדש: Login, Dashboard, Find Matches map.</li>
-    <li>מומלץ להוסיף: Match Manager, Players page, Operations page, Profile modal.</li>
-  </ul>
-
-  <h2>10. ביבליוגרפיה</h2>
+  <h2>11. ביבליוגרפיה</h2>
   <p>הסקירה הספרותית שימשה להצדקת הבחירות האלגוריתמיות והארכיטקטוניות בפרויקט.</p>
   <table>
     <tr><th>#</th><th>מקור</th><th>שימוש בפרויקט</th></tr>
@@ -215,12 +268,13 @@ VITE_SUPABASE_ANON_KEY=...
     </tr>
   </table>
 
-  <h2>11. הנחיות הגשה</h2>
+  <h2>12. הנחיות הגשה</h2>
   <ul>
-    <li>להגיש ZIP עם קוד המקור בלבד.</li>
-    <li>לא לכלול <code>node_modules</code>, <code>dist</code>, <code>coverage</code>, <code>.env</code>.</li>
-    <li>לכלול <code>README.md</code> עם הוראות התקנה והרצה.</li>
-    <li>לצרף PDF יחיד עם כל מסמכי הפרויקט.</li>
+    <li><strong>קובץ 1:</strong> ZIP עם קוד המקור בלבד (ללא node_modules, dist, .env).</li>
+    <li><strong>קובץ 2:</strong> PDF יחיד עם כל מסמכי הפרויקט (ספר זה).</li>
+    <li>לכלול <code>README.md</code> עם הוראות התקנה, build, test והרצה.</li>
+    <li>GitHub: <code>https://github.com/AlonB22/Hevre-App</code> (לא מגישים קישור במקום קבצים).</li>
+    <li>מגיש רק חבר צוות אחד.</li>
   </ul>
 </body>
 </html>

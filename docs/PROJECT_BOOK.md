@@ -35,6 +35,8 @@ Suggested screenshots for this section:
 - Old team split and balance feedback.
 - Old leaderboard and nearby games.
 
+These screenshots are embedded in the final PDF (`docs/Footy-Project-Book.pdf`), section 3.
+
 ### 2.2 Current Version - Footy
 
 The current version upgrades the prototype into a larger soccer community platform:
@@ -70,8 +72,6 @@ Suggested screenshots for this section:
 | Ilia Simhovich | 323637793 | Fair-match algorithm and player rating system |
 | Alon Berla | 208544064 | Database, Supabase, data model and persistence |
 | Yoel Kraitman | 209710615 | Server, deployment and production environment |
-
-Note: student ID numbers were not found in the repository files. They should be filled in manually before final submission if required by the college.
 
 ### Ilia Simhovich
 
